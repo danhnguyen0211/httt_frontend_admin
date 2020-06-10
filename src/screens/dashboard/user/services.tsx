@@ -17,3 +17,12 @@ export const deleteUser = async (id: number) => {
     throw error;
   }
 };
+
+export const getAllAddresses = async () => {
+  try {
+    const response = await getService("address", null, false, false);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

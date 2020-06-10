@@ -26,6 +26,8 @@ interface IDispatchToProps {
   ) => void;
   deleteProductAction?: (id: number) => void;
   addNewItemAction?: (sale: number, sellingPrice: number, productId: number) => void;
+  offLoadingAction?: () => void;
+  onLoadingAction?: () => void;
 }
 
 interface IStateToProps {
@@ -50,6 +52,8 @@ interface IState {
   sellingPrice?: number;
   productId?: number;
   searchKey: string;
+  isCheckedImage: boolean;
+  product_images: any;
 }
 
 export { IProps, IState };

@@ -18,6 +18,14 @@ interface IState {
   searchKey: string;
   itemOrder?: any;
   totalCost: number;
+  searchKeyCustomer: string;
+  currentCustomer: any;
+  currentPayment: any;
+  currentShipping: any;
+  currentAccount: any;
+  currentAddress: any;
+  code: string;
+  paymentStatus: string;
 }
 
 export { IProps, IState };

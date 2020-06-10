@@ -7,6 +7,7 @@ import { bindActionCreators, Dispatch } from "redux";
 import { getAllCustomersAction } from "../../customer/redux/actions";
 import { getAllItemsAction } from "../../item/redux/actions";
 import { setListItemsCartAction } from "../redux/actions";
+// import {getAllShippingsAction} from "../../"
 import { IProps, IState } from "./propState";
 
 class AddOrderScreen extends React.Component<IProps> {
@@ -15,7 +16,15 @@ class AddOrderScreen extends React.Component<IProps> {
     modalEditStatus: false,
     searchKey: "",
     itemOrder: [],
-    totalCost: 0
+    totalCost: 0,
+    searchKeyCustomer: "",
+    currentCustomer: null,
+    currentPayment: null,
+    currentShipping: null,
+    currentAccount: null,
+    currentAddress: null,
+    code: null,
+    paymentStatus: null
   };
 
   static getDerivedStateFromProps(state, props) {
@@ -57,6 +66,12 @@ class AddOrderScreen extends React.Component<IProps> {
         });
         this.props.setListItemsCartAction(this.props.listCart.dataCart);
       }
+    });
+  };
+
+  chooseCustomer = customer => () => {
+    this.setState({
+      currentCustomer: customer
     });
   };
 
@@ -198,55 +213,41 @@ class AddOrderScreen extends React.Component<IProps> {
       }
     ];
 
-    // const columnCustomer = [
-    //   {
-    //     name: "Name",
-    //     selector: "name",
-    //     sortable: true,
-    //     width: "200px"
-    //   },
-    //   {
-    //     name: "Product Code",
-    //     selector: "product.code",
-    //     sortable: true,
-    //     width: "100px"
-    //   },
-    //   {
-    //     name: "Selling Price",
-    //     selector: "sellingPrice",
-    //     sortable: true,
-    //     width: "100px"
-    //   },
-    //   {
-    //     name: "Sale",
-    //     selector: "sale",
-    //     sortable: true,
-    //     width: "100px"
-    //   },
-    //   {
-    //     name: "Quantity",
-    //     selector: "quantity",
-    //     sortable: true,
-    //     width: "100px"
-    //   },
-    //   {
-    //     name: "Options",
-    //     cell: row => (
-    //       <div>
-    //         <MDBBtn onClick={this.delete(row)}>Delete</MDBBtn>
-    //       </div>
-    //     ),
-    //     right: true,
-    //     ignoreRowClick: true,
-    //     allowOverflow: true,
-    //     button: true,
-    //     width: "200px"
-    //   }
-    // ];
+    const columnCustomer = [
+      {
+        name: "Name",
+        selector: "name",
+        sortable: true,
+        width: "200px"
+      },
+      {
+        name: "Phone",
+        selector: "phone",
+        sortable: true,
+        width: "100px"
+      },
+      {
+        name: "Options",
+        cell: row => (
+          <div>
+            <MDBBtn onClick={this.chooseCustomer(row)}>Add</MDBBtn>
+          </div>
+        ),
+        right: true,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+        width: "200px"
+      }
+    ];
 
     const data = this.props.listItems.data.filter(x => {
       return x.product.name.toLowerCase().includes(this.state.searchKey.toLowerCase());
     });
+    const dataCustomer = this.props.listCustomers.data.filter(x => {
+      return x.name.toLowerCase().includes(this.state.searchKeyCustomer.toLowerCase());
+    });
+
     return (
       <ContainerComponent>
         <MDBContainer>
@@ -267,7 +268,12 @@ class AddOrderScreen extends React.Component<IProps> {
               </MDBCol>
               <MDBCol md="3">
                 <MDBRow>
-                  <MDBCol>Khách hàng</MDBCol>
+                  <MDBCol>Khách hàng: {this.state.currentCustomer ? this.state.currentCustomer.name : null}</MDBCol>
+                </MDBRow>
+                <MDBBtn onClick={this.handleChange("searchKeyCustomer")}>Thêm khách hàng mới</MDBBtn>
+                <MDBRow>
+                  <MDBInput hint="Search" type="text" containerClass="mt-0" />
+                  <DataTable columns={columnCustomer} theme="solarized" data={dataCustomer} />
                 </MDBRow>
                 <MDBRow>
                   <MDBRow>
@@ -278,7 +284,7 @@ class AddOrderScreen extends React.Component<IProps> {
                           <td>{this.state.totalCost}</td>
                         </tr>
                       </MDBTable>
-                      <MDBBtn primary>Thanh toán</MDBBtn>
+                      <MDBBtn color="primary">Thanh toán</MDBBtn>
                     </MDBCol>
                   </MDBRow>
                 </MDBRow>
@@ -295,7 +301,8 @@ const mapStateToProps = state => {
   return {
     listItems: state.screen.item,
     listCustomers: state.screen.customer,
-    listCart: state.screen.order
+    listCart: state.screen.order,
+    listShipping: state.screen.shipping
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>

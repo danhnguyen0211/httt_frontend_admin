@@ -66,3 +66,22 @@ export const deleteProduct = async (id: number) => {
     throw error;
   }
 };
+
+export const uploadPhoto = async (body: FormData) => {
+  try {
+    var requestOptions = {
+      method: "POST",
+      body: body,
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    };
+    const response = fetch("http://localhost:9605/image/upload", requestOptions as any)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log("error", error));
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

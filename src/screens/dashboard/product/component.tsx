@@ -1,8 +1,13 @@
 import ContainerComponent from "containers/components/layout/container";
+import { offLoadingAction, onLoadingAction } from "containers/redux/actions";
 import {
+  MDBAlert,
   MDBBtn,
+  MDBCard,
+  MDBCardBody,
   MDBCol,
   MDBContainer,
+  MDBFileInput,
   MDBInput,
   MDBModal,
   MDBModalBody,
@@ -36,7 +41,9 @@ class ProductScreen extends React.Component<IProps> {
     sale: null,
     sellingPrice: null,
     productId: null,
-    searchKey: ""
+    searchKey: "",
+    isCheckedImage: true,
+    product_images: []
   };
 
   componentDidMount() {
@@ -123,7 +130,7 @@ class ProductScreen extends React.Component<IProps> {
     });
   };
 
-  saveAdd = () => {
+  saveAdd = async () => {
     this.props.addNewProductAction(
       this.state.name,
       this.state.code,
@@ -153,6 +160,34 @@ class ProductScreen extends React.Component<IProps> {
     this.setState({ ...this.state, categoryId: event[0] });
   };
 
+  _uploadPhoto = file => {
+    const arr = Array.from(file);
+    console.log(arr, "a");
+    arr.map(x => {
+      let count = 0;
+      if ((x as any).type.toString().includes("image")) {
+        this.state.product_images.push(x);
+      } else {
+        count += 1;
+      }
+      if (count > 0) {
+        this.setState(
+          {
+            isCheckedImage: false,
+            product_images: []
+          },
+          () => {
+            count = 0;
+          }
+        );
+      } else {
+        this.setState({
+          isCheckedImage: true
+        });
+      }
+    });
+  };
+
   render() {
     this.props.listCategory.data.map(x => {
       let new_item = {
@@ -168,6 +203,21 @@ class ProductScreen extends React.Component<IProps> {
           <strong>Add a new product</strong>
         </MDBModalHeader>
         <MDBModalBody>
+          <MDBCard testimonial>
+            <MDBCardBody>
+              <MDBFileInput
+                className="upload-logo"
+                btnTitle="upload your logo"
+                getValue={this._uploadPhoto}
+                multiple={true}
+              />
+              {this.state.isCheckedImage === false ? (
+                <MDBAlert color="danger" className="text-center w-100 mt-20">
+                  The uploaded file must be image
+                </MDBAlert>
+              ) : null}
+            </MDBCardBody>
+          </MDBCard>
           <MDBInput label="Name" value={this.state.name ? this.state.name : ""} onChange={this.handleChange("name")} />
           <MDBInput label="Code" value={this.state.code ? this.state.code : ""} onChange={this.handleChange("code")} />
           <MDBInput
@@ -219,6 +269,21 @@ class ProductScreen extends React.Component<IProps> {
           <strong>Edit the product</strong>
         </MDBModalHeader>
         <MDBModalBody>
+          <MDBCard testimonial>
+            <MDBCardBody>
+              <MDBFileInput
+                className="upload-logo"
+                btnTitle="upload your logo"
+                getValue={this._uploadPhoto}
+                multiple={true}
+              />
+              {this.state.isCheckedImage === false ? (
+                <MDBAlert color="danger" className="text-center w-100 mt-20">
+                  The uploaded file must be image
+                </MDBAlert>
+              ) : null}
+            </MDBCardBody>
+          </MDBCard>
           <MDBInput label="Name" value="Abc" />
           <MDBInput label="Code" value="#123" />
           <MDBInput label="Description" value="Des" />
@@ -319,9 +384,9 @@ class ProductScreen extends React.Component<IProps> {
       },
       {
         name: "Category",
-        // selector: "category",
+        selector: "category.name",
         sortable: true,
-        width: "100px"
+        width: "250px"
       },
       {
         name: "Options",
@@ -387,7 +452,9 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       editProductAction,
       addNewProductAction,
       deleteProductAction,
-      addNewItemAction
+      addNewItemAction,
+      offLoadingAction,
+      onLoadingAction
     },
     dispatch
   );

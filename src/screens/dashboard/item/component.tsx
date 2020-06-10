@@ -49,7 +49,12 @@ class ItemsScreen extends React.Component<IProps> {
   saveEdit = () => {};
 
   delete = (id: number) => () => {
-    console.log(id);
+    this.props.deleteItemAction(id);
+    this.props.listItems.data.map((x, index) => {
+      if (x.id === x) {
+        this.props.listItems.data.splice(index, 1);
+      }
+    });
   };
 
   handleChange = (field: string) => (event: any) => {
