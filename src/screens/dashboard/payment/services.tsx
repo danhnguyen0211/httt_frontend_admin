@@ -3,6 +3,7 @@ import { getService, postService } from "services/config";
 export const getAllPayments = async () => {
   try {
     const response = await getService("payment", null, false, false);
+    console.log(response, "res");
     return response;
   } catch (error) {
     throw error;

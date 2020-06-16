@@ -7,8 +7,7 @@ import {
   MDBModal,
   MDBModalBody,
   MDBModalFooter,
-  MDBModalHeader,
-  MDBSelect
+  MDBModalHeader
 } from "mdbreact";
 import React from "react";
 import DataTable from "react-data-table-component";
@@ -21,28 +20,10 @@ class PaymentScreen extends React.Component<IProps> {
   state: IState = {
     modalAddStatus: false,
     modalEditStatus: false,
-    name: null,
-    phone: null,
-    age: null,
-    sex: "Male",
-    username: null,
-    password: null,
+    method: null,
+    ownerName: null,
+    ownerCardNumber: null,
     id: null,
-    options: [
-      {
-        checked: true,
-        text: "Male",
-        value: "Male"
-      },
-      {
-        text: "Female",
-        value: "Female"
-      },
-      {
-        text: "Other",
-        value: "Other"
-      }
-    ],
     searchKey: ""
   };
 
@@ -57,24 +38,13 @@ class PaymentScreen extends React.Component<IProps> {
     });
   };
 
-  openModalEdit = (
-    id: number,
-    name: string,
-    phone: string,
-    age: number,
-    sex: string,
-    username: string,
-    password: string
-  ) => () => {
+  openModalEdit = (id: number, method: string, ownerName: string, ownerCardNumber: string) => () => {
     this.setState({
       modalEditStatus: true,
       id,
-      name,
-      phone,
-      age,
-      sex,
-      username,
-      password
+      method,
+      ownerName,
+      ownerCardNumber
     });
   };
 
@@ -87,45 +57,28 @@ class PaymentScreen extends React.Component<IProps> {
 
   clear = () => {
     this.setState({
-      name: null,
-      phone: null,
-      age: null,
-      sex: "Male",
-      username: null,
-      password: null
+      method: null,
+      ownerName: null,
+      ownerCardNumber: null,
+      id: null
     });
   };
 
   saveAdd = () => {
-    this.props.addNewPaymentAction(
-      this.state.name,
-      this.state.phone,
-      this.state.age,
-      this.state.sex,
-      this.state.username,
-      this.state.password
-    );
+    this.props.addNewPaymentAction(this.state.method, this.state.ownerName, this.state.ownerCardNumber);
     this.toggleModalAdd();
   };
 
   saveEdit = () => {
-    this.props.editPaymentAction(
-      this.state.id,
-      this.state.name,
-      this.state.phone,
-      this.state.age,
-      this.state.sex,
-      this.state.username,
-      this.state.password
-    );
+    this.props.editPaymentAction(this.state.id, this.state.method, this.state.ownerName, this.state.ownerCardNumber);
     this.closeModalEdit();
   };
 
   delete = (id: number) => () => {
     this.props.deletePaymentAction(id);
-    this.props.listCustomer.data.map((x, index) => {
+    this.props.listPayment.data.map((x, index) => {
       if (x.id === x) {
-        this.props.listCustomer.data.splice(index, 1);
+        this.props.listPayment.data.splice(index, 1);
       }
     });
   };
@@ -134,29 +87,28 @@ class PaymentScreen extends React.Component<IProps> {
     event.persist();
     this.setState(state => ({ ...state, [field]: event.target.value }));
   };
-  handleSelectChange = event => {
-    this.setState({ ...this.state, sex: event[0] });
-  };
 
   render() {
     const modalAddUser = this.state.modalAddStatus ? (
       <MDBModal isOpen={this.state.modalAddStatus} toggle={this.toggleModalAdd}>
         <MDBModalHeader toggle={this.toggleModalAdd}>
-          <strong>Add a new customer</strong>
+          <strong>Add a new payment method</strong>
         </MDBModalHeader>
         <MDBModalBody>
-          <MDBInput label="Name" value={this.state.name ? this.state.name : ""} onChange={this.handleChange("name")} />
           <MDBInput
-            label="Phone"
-            value={this.state.phone ? this.state.phone : ""}
-            onChange={this.handleChange("phone")}
+            label="Method"
+            value={this.state.method ? this.state.method : ""}
+            onChange={this.handleChange("method")}
           />
-          <MDBInput label="Age" value={this.state.age ? this.state.age : ""} onChange={this.handleChange("age")} />
-          <MDBSelect
-            options={this.state.options}
-            selected="Choose Sex"
-            label="Sex"
-            getValue={this.handleSelectChange}
+          <MDBInput
+            label="Owner Name"
+            value={this.state.ownerName ? this.state.ownerName : ""}
+            onChange={this.handleChange("ownerName")}
+          />
+          <MDBInput
+            label="Owner Card Number"
+            value={this.state.ownerCardNumber ? this.state.ownerCardNumber : ""}
+            onChange={this.handleChange("ownerCardNumber")}
           />
         </MDBModalBody>
         <MDBModalFooter>
@@ -176,18 +128,20 @@ class PaymentScreen extends React.Component<IProps> {
           <strong>Edit the user</strong>
         </MDBModalHeader>
         <MDBModalBody>
-          <MDBInput label="Name" value={this.state.name ? this.state.name : ""} onChange={this.handleChange("name")} />
           <MDBInput
-            label="Phone"
-            value={this.state.phone ? this.state.phone : ""}
-            onChange={this.handleChange("phone")}
+            label="Method"
+            value={this.state.method ? this.state.method : ""}
+            onChange={this.handleChange("method")}
           />
-          <MDBInput label="Age" value={this.state.age ? this.state.age : ""} onChange={this.handleChange("age")} />
-          <MDBSelect
-            options={this.state.options}
-            selected="Choose Sex"
-            label="Sex"
-            getValue={this.handleSelectChange}
+          <MDBInput
+            label="Owner Name"
+            value={this.state.ownerName ? this.state.ownerName : ""}
+            onChange={this.handleChange("ownerName")}
+          />
+          <MDBInput
+            label="Owner Card Number"
+            value={this.state.ownerCardNumber ? this.state.ownerCardNumber : ""}
+            onChange={this.handleChange("ownerCardNumber")}
           />
         </MDBModalBody>
         <MDBModalFooter>
@@ -209,38 +163,28 @@ class PaymentScreen extends React.Component<IProps> {
         width: "70px"
       },
       {
-        name: "Name",
-        selector: "name",
+        name: "Method",
+        selector: "method",
         sortable: true,
         width: "300px"
       },
       {
-        name: "Phone",
-        selector: "phone",
+        name: "Owner Name",
+        selector: "ownerName",
         sortable: true,
         width: "200px"
       },
       {
-        name: "Age",
-        selector: "age",
+        name: "Owner Card Number",
+        selector: "ownerCardNumber",
         sortable: true,
-        width: "100px"
-      },
-      {
-        name: "Sex",
-        selector: "sex",
-        sortable: true,
-        width: "100px"
+        width: "250px"
       },
       {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn
-              onClick={this.openModalEdit(row.id, row.name, row.phone, row.age, row.sex, row.username, row.password)}
-            >
-              Edit
-            </MDBBtn>
+            <MDBBtn onClick={this.openModalEdit(row.id, row.method, row.ownerName, row.ownerCardNumber)}>Edit</MDBBtn>
             <MDBBtn onClick={this.delete(row.id)}>Delete</MDBBtn>
           </div>
         ),
@@ -251,15 +195,15 @@ class PaymentScreen extends React.Component<IProps> {
         width: "200px"
       }
     ];
-    const data = this.props.listCustomer.data.filter(x => {
-      return x.name.toLowerCase().includes(this.state.searchKey.toLowerCase());
+    const data = this.props.listPayment.data.filter(x => {
+      return x.method.toLowerCase().includes(this.state.searchKey.toLowerCase());
     });
     return (
       <ContainerComponent>
         {modalAddUser}
         {modalEditUser}
         <MDBContainer>
-          <MDBBtn onClick={this.toggleModalAdd}>Add a new customer</MDBBtn>
+          <MDBBtn onClick={this.toggleModalAdd}>Add a new payment method</MDBBtn>
           <MDBCol md="6">
             <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
           </MDBCol>
@@ -272,7 +216,7 @@ class PaymentScreen extends React.Component<IProps> {
 
 const mapStateToProps = state => {
   return {
-    listCustomer: state.screen.customer
+    listPayment: state.screen.payment
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>

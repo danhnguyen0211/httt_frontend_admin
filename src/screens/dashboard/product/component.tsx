@@ -1,3 +1,4 @@
+import Axios from "axios";
 import ContainerComponent from "containers/components/layout/container";
 import { offLoadingAction, onLoadingAction } from "containers/redux/actions";
 import {
@@ -27,6 +28,7 @@ import { addNewProductAction, deleteProductAction, editProductAction, getAllProd
 class ProductScreen extends React.Component<IProps> {
   state: IState = {
     modalAddStatus: false,
+    modalAddImageStatus: false,
     modalEditStatus: false,
     modalSellStatus: false,
     name: null,
@@ -43,7 +45,8 @@ class ProductScreen extends React.Component<IProps> {
     productId: null,
     searchKey: "",
     isCheckedImage: true,
-    product_images: []
+    product_images: [],
+    id: null
   };
 
   componentDidMount() {
@@ -53,9 +56,15 @@ class ProductScreen extends React.Component<IProps> {
 
   toggleModalAdd = () => {
     console.log(this.props.listCategory, "Danh");
-    this.setState({
-      modalAddStatus: !this.state.modalAddStatus
-    });
+    this.setState(
+      {
+        modalAddStatus: !this.state.modalAddStatus
+      },
+      () => {
+        this.props.getAllProductsAction();
+        this.props.getAllCategoryAction();
+      }
+    );
   };
 
   openModalEdit = (
@@ -188,6 +197,48 @@ class ProductScreen extends React.Component<IProps> {
     });
   };
 
+  toggleModalAddImage = id => () => {
+    this.setState({
+      modalAddImageStatus: !this.state.modalAddImageStatus,
+      id: id
+    });
+  };
+
+  closeModalAddImage = () => {
+    this.setState({
+      modalAddImageStatus: !this.state.modalAddImageStatus,
+      product_images: []
+    });
+  };
+
+  saveImage = async () => {
+    console.log(this.state.id, "id");
+    this.props.onLoadingAction();
+    const formData = new FormData();
+    for (let i = 0; i < this.state.product_images.length; i++) {
+      formData.append("image", this.state.product_images[i]);
+      formData.append("productId", this.state.id.toString());
+    }
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    };
+    Axios.post("http://localhost:9605/image/upload", formData, config)
+      .then(res => {
+        console.log(res);
+      })
+      .then(() => {
+        this.closeModalAddImage();
+      });
+    // this.state.product_images.map(x => {
+    //   formData.append("image", x as any);
+    //   formData.append("productId", this.state.id.toString());
+    // });
+    // await uploadPhoto(formData);
+    this.props.offLoadingAction();
+  };
+
   render() {
     this.props.listCategory.data.map(x => {
       let new_item = {
@@ -196,6 +247,39 @@ class ProductScreen extends React.Component<IProps> {
       };
       this.state.options.push(new_item);
     });
+
+    const modalAddImage = this.state.modalAddImageStatus ? (
+      <MDBModal isOpen={this.state.modalAddImageStatus} toggle={this.closeModalAddImage}>
+        <MDBModalHeader toggle={this.closeModalAddImage}>
+          <strong>Add a new image</strong>
+        </MDBModalHeader>
+        <MDBModalBody>
+          <MDBCard testimonial>
+            <MDBCardBody>
+              <MDBFileInput
+                className="upload-logo"
+                btnTitle="upload your logo"
+                getValue={this._uploadPhoto}
+                multiple={true}
+              />
+              {this.state.isCheckedImage === false ? (
+                <MDBAlert color="danger" className="text-center w-100 mt-20">
+                  The uploaded file must be image
+                </MDBAlert>
+              ) : null}
+            </MDBCardBody>
+          </MDBCard>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={this.toggleModalAddImage}>
+            Close
+          </MDBBtn>
+          <MDBBtn color="primary" onClick={this.saveImage}>
+            Save
+          </MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
+    ) : null;
 
     const modalAddProduct = this.state.modalAddStatus ? (
       <MDBModal isOpen={this.state.modalAddStatus} toggle={this.toggleModalAdd}>
@@ -392,6 +476,7 @@ class ProductScreen extends React.Component<IProps> {
         name: "Options",
         cell: row => (
           <div>
+            <MDBBtn onClick={this.toggleModalAddImage(row.id)}>Add Images</MDBBtn>
             <MDBBtn
               onClick={this.openModalEdit(
                 row.id,
@@ -426,6 +511,7 @@ class ProductScreen extends React.Component<IProps> {
         {modalAddProduct}
         {modalEditProduct}
         {modalSellProduct}
+        {modalAddImage}
         <MDBContainer>
           <MDBBtn onClick={this.toggleModalAdd}>Add a new product</MDBBtn>
           <MDBCol md="6">

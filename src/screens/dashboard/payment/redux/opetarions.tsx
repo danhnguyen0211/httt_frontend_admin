@@ -35,7 +35,7 @@ function* addNewPaymentActionWatcher() {
       const { method, ownerName, ownerCardNumber } = payload;
       const result = yield call(addNewPayment, method, ownerName, ownerCardNumber);
       if (result && result.success === true) {
-        const data = yield select(state => state.screen.customer);
+        const data = yield select(state => state.screen.payment);
         data.data.unshift(result.data);
         yield put(setListPaymentsAction(data.data));
       } else {
@@ -56,7 +56,7 @@ function* editPaymentActionWatcher() {
       const { id, method, ownerName, ownerCardNumber } = payload;
       const result = yield call(editPayment, id, method, ownerName, ownerCardNumber);
       if (result && result.success === true) {
-        const data = yield select(state => state.screen.customer);
+        const data = yield select(state => state.screen.payment);
         data.data.map(x => {
           if (x.id === id) {
             x.method = method;
@@ -83,7 +83,7 @@ function* deletePaymentActionWatcher() {
       const { id } = payload;
       const result = yield call(deletePayment, id);
       if (result && result.success === true) {
-        const data = yield select(state => state.screen.customer);
+        const data = yield select(state => state.screen.payment);
         if (data) {
           data.data.map((x, index) => {
             if (x.id === id) {

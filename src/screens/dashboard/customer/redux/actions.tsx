@@ -20,7 +20,24 @@ const actions = createActions({
     username,
     password
   }),
-  DELETE_CUSTOMER_ACTION: id => ({ id })
+  DELETE_CUSTOMER_ACTION: id => ({ id }),
+  GET_ALL_ADDRESSES_ACTION: () => ({}),
+  GET_ADDRESSES_BY_ID_ACTION: id => ({ id }),
+  SET_LIST_ADDRESSES_ACTION: data => ({ data }),
+  ADD_NEW_ADDRESS_ACTION: (address, zipCode, isDefault, customerId) => ({
+    address,
+    zipCode,
+    isDefault,
+    customerId
+  }),
+  EDIT_ADDRESS_ACTION: (id, address, zipCode, isDefault, customerId) => ({
+    id,
+    address,
+    zipCode,
+    isDefault,
+    customerId
+  }),
+  DELETE_ADDRESS_ACTION: id => ({ id })
 });
 
 export const {
@@ -28,5 +45,11 @@ export const {
   setListCustomersAction,
   addNewCustomerAction,
   editCustomerAction,
-  deleteCustomerAction
+  deleteCustomerAction,
+  getAllAddressesAction,
+  getAddressesByIdAction,
+  setListAddressesAction,
+  addNewAddressAction,
+  editAddressAction,
+  deleteAddressAction
 } = actions;

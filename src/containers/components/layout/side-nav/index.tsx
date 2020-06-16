@@ -69,7 +69,7 @@ export default class SideNavComponent extends React.Component {
             <MDBSideNavLink to="/dashboard/customer">Quản lý khách hàng</MDBSideNavLink>
           </MDBSideNavCat>
           <MDBSideNavCat name="Thống kê" id="stats" icon="chart-bar" href="#">
-            <MDBSideNavLink to="/stats">Thống kê</MDBSideNavLink>
+            <MDBSideNavLink to="/dashboard/statistic">Thống kê</MDBSideNavLink>
           </MDBSideNavCat>
           <MDBSideNavCat name="About" id="about" icon="eye">
             <MDBSideNavLink>Instruction</MDBSideNavLink>

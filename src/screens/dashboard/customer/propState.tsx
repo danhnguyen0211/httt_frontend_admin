@@ -1,4 +1,6 @@
-interface IProps extends IDispatchToProps, IStateToProps {}
+interface IProps extends IDispatchToProps, IStateToProps {
+  history: any;
+}
 
 interface IDispatchToProps {
   getAllCustomersAction?: () => void;

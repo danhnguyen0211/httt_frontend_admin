@@ -37,6 +37,7 @@ interface IStateToProps {
 
 interface IState {
   modalAddStatus: boolean;
+  modalAddImageStatus: boolean;
   modalEditStatus: boolean;
   modalSellStatus: boolean;
   options: any;
@@ -54,6 +55,7 @@ interface IState {
   searchKey: string;
   isCheckedImage: boolean;
   product_images: any;
+  id: number;
 }
 
 export { IProps, IState };

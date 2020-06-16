@@ -90,6 +90,10 @@ module.exports = env => {
         {
           from: "./server/",
           to: "../"
+        },
+        {
+          from: "./src/assets",
+          to: "./assets"
         }
       ]),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

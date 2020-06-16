@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { IProps, IState } from "./propState";
 import { addNewCustomerAction, deleteCustomerAction, editCustomerAction, getAllCustomersAction } from "./redux/actions";
+// import { browserHistory } from 'react-router-dom';
 
 class CustomerScreen extends React.Component<IProps> {
   state: IState = {
@@ -83,6 +84,11 @@ class CustomerScreen extends React.Component<IProps> {
     this.setState({
       modalEditStatus: false
     });
+  };
+
+  addAddress = id => () => {
+    this.props.history.push("/dashboard/customer/addAddress");
+    localStorage.setItem("router", id);
   };
 
   clear = () => {
@@ -212,7 +218,7 @@ class CustomerScreen extends React.Component<IProps> {
         name: "Name",
         selector: "name",
         sortable: true,
-        width: "300px"
+        width: "200px"
       },
       {
         name: "Phone",
@@ -236,6 +242,7 @@ class CustomerScreen extends React.Component<IProps> {
         name: "Options",
         cell: row => (
           <div>
+            <MDBBtn onClick={this.addAddress(row.id)}>Add Address</MDBBtn>
             <MDBBtn
               onClick={this.openModalEdit(row.id, row.name, row.phone, row.age, row.sex, row.username, row.password)}
             >

@@ -2,41 +2,22 @@ interface IProps extends IDispatchToProps, IStateToProps {}
 
 interface IDispatchToProps {
   getAllPaymentsAction?: () => void;
-  addNewPaymentAction?: (
-    name: string,
-    phone: string,
-    age: number,
-    sex: string,
-    username: string,
-    password: string
-  ) => void;
-  editPaymentAction?: (
-    id: number,
-    name: string,
-    phone: string,
-    age: number,
-    sex: string,
-    username: string,
-    password: string
-  ) => void;
+  addNewPaymentAction?: (method: string, ownerName: string, ownerCardNumber: string) => void;
+  editPaymentAction?: (id: number, method: string, ownerName: string, ownerCardNumber: string) => void;
   deletePaymentAction?: (id: number) => void;
 }
 
 interface IStateToProps {
-  listCustomer: any;
+  listPayment: any;
 }
 
 interface IState {
   modalAddStatus: boolean;
   modalEditStatus: boolean;
-  name: string;
-  phone: string;
-  age: number;
-  sex: string;
-  username: string;
-  password: string;
+  method: string;
+  ownerName: string;
+  ownerCardNumber: string;
   id: number;
-  options: any;
   searchKey: string;
 }
 
