@@ -217,8 +217,8 @@ class ProductScreen extends React.Component<IProps> {
     const formData = new FormData();
     for (let i = 0; i < this.state.product_images.length; i++) {
       formData.append("image", this.state.product_images[i]);
-      formData.append("productId", this.state.id.toString());
     }
+    formData.append("productId", this.state.id.toString());
     const config = {
       headers: {
         "content-type": "multipart/form-data"
