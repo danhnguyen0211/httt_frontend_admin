@@ -1,21 +1,17 @@
-import { SYSTEM } from "containers/contants";
 import { offLoadingAction, onLoadingAction } from "containers/redux/actions";
 import { logError } from "containers/utils";
-import { push } from "react-router-redux";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { checkLogin } from "../services";
-import { logInAction } from "./actions";
+import { getItemById } from "../services";
+import { getItemByIdAction, setItemAction } from "./actions";
 
-function* logInWatcher() {
-  yield takeLatest(logInAction, function*({ payload }: any) {
-    const { username, password } = payload;
-    console.log(payload);
+function* getItemByIdWatcher() {
+  yield takeLatest(getItemByIdAction, function*({ payload }: any) {
     try {
+      const { id } = payload;
       yield put(onLoadingAction());
-      const result = yield call(checkLogin, username, password);
-      if (result.success === 1) {
-        yield localStorage.setItem(SYSTEM.TOKEN, result.access_token);
-        yield put(push("/dashboard"));
+      const result = yield call(getItemById, id);
+      if (result.success === true) {
+        yield put(setItemAction(result.data));
       } else {
         logError(result.message);
       }
@@ -27,4 +23,4 @@ function* logInWatcher() {
   });
 }
 
-export default { logInWatcher };
+export default { getItemByIdWatcher };

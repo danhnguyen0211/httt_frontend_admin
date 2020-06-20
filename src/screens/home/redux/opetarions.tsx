@@ -1,21 +1,18 @@
-import { SYSTEM } from "containers/contants";
 import { offLoadingAction, onLoadingAction } from "containers/redux/actions";
 import { logError } from "containers/utils";
-import { push } from "react-router-redux";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { checkLogin } from "../services";
-import { logInAction } from "./actions";
+import { setListCategoryAction } from "../../dashboard/category/redux/actions";
+import { getAllCategories, getAllItems } from "../services";
+import { getAllCategoriesAction, getAllItemsAction, setListItemsAction } from "./actions";
 
-function* logInWatcher() {
-  yield takeLatest(logInAction, function*({ payload }: any) {
-    const { username, password } = payload;
-    console.log(payload);
+function* getAllItemsActionWatcher() {
+  yield takeLatest(getAllItemsAction, function*() {
     try {
       yield put(onLoadingAction());
-      const result = yield call(checkLogin, username, password);
-      if (result.success === 1) {
-        yield localStorage.setItem(SYSTEM.TOKEN, result.access_token);
-        yield put(push("/dashboard"));
+
+      const result = yield call(getAllItems);
+      if (result.success === true) {
+        yield put(setListItemsAction(result.data));
       } else {
         logError(result.message);
       }
@@ -27,4 +24,22 @@ function* logInWatcher() {
   });
 }
 
-export default { logInWatcher };
+function* getAllCategoriesActionWatcher() {
+  yield takeLatest(getAllCategoriesAction, function*() {
+    try {
+      yield put(onLoadingAction());
+      const result = yield call(getAllCategories);
+      if (result.success === true) {
+        yield put(setListCategoryAction(result.data));
+      } else {
+        logError(result.message);
+      }
+    } catch (error) {
+      logError(error);
+    } finally {
+      yield put(offLoadingAction());
+    }
+  });
+}
+
+export default { getAllCategoriesActionWatcher, getAllItemsActionWatcher };

@@ -2,28 +2,32 @@
   cursor: pointer;
 }
 
-.flex-row-center{
+.flex-row-center {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-.flex-row-align-top{
+.flex-row-align-top {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
-.flex-row-align-center{
+.flex-row-align-center {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
-.flex-column-center{
+.flex-column-center {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.min-h500{
+.justify-content-center {
+  display: flex !important;
+  justify-content: center !important;
+}
+.min-h500 {
   min-height: 500px;
 }
 .modal-1000 {
@@ -34,7 +38,6 @@
       margin-bottom: 1.5rem !important;
     }
   }
-
 }
 .modal-1000.stepper {
   .md-form {
@@ -43,7 +46,7 @@
   .select-dropdown {
     .md-form {
       margin-bottom: 0px !important;
-      .form-control{
+      .form-control {
         padding-left: 10px;
       }
     }
@@ -54,7 +57,7 @@
     margin-bottom: 34px !important;
   }
 
-  .step-content{
+  .step-content {
     width: calc(100% - 3.13rem);
     padding-top: 0px;
     padding-bottom: 0px;
@@ -67,16 +70,16 @@
       width: 1px;
       height: calc(100% - 40px);
       content: "";
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   }
-}
   .form-date-picker {
     margin-top: 33px;
     margin-bottom: 0px !important;
-    .date-type{
+    .date-type {
       margin-bottom: 10px !important;
     }
-    .fake-label{
+    .fake-label {
       margin-bottom: -25px;
       margin-top: -5px;
     }
@@ -84,16 +87,16 @@
       margin-top: 10px;
     }
   }
-  .stepper{
+  .stepper {
     padding-top: 0px;
     margin-top: 0px;
     margin-right: 0px;
   }
-  label{
-    left:0px !important;
+  label {
+    left: 0px !important;
   }
   .md-form {
-    label{
+    label {
       text-align: left;
       width: max-content;
       font-size: 14px;
@@ -101,8 +104,8 @@
   }
 
   .react-datepicker-wrapper {
-    input{
-       text-indent: 0px;
+    input {
+      text-indent: 0px;
     }
   }
   .stepper-vertical li {
@@ -113,24 +116,26 @@
 
   .is-edited-user {
     display: block;
-    padding: .94rem;
+    padding: 0.94rem;
     margin-top: 0;
     // margin-left: 3.13rem;
     width: 100%;
   }
-  .is-edited{
+  .is-edited {
     overflow: inherit;
     margin: 0px;
   }
-  .amount-number{
-    ::-webkit-input-placeholder { /* Edge */
+  .amount-number {
+    ::-webkit-input-placeholder {
+      /* Edge */
       font-size: 14px;
     }
-    
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+
+    :-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
       font-size: 14px;
     }
-    
+
     ::placeholder {
       font-size: 14px;
     }
@@ -139,7 +144,8 @@
 .work-break {
   word-break: break-word;
 }
-.form-control:disabled, .form-control[readonly] {
+.form-control:disabled,
+.form-control[readonly] {
   background-color: #e9ecef !important;
   opacity: 1;
 }
@@ -149,7 +155,7 @@
 .react-select-1 {
   z-index: 3;
 }
-.react-loading-skeleton{
+.react-loading-skeleton {
   margin-bottom: 20px;
 }
 span.fake-label {
@@ -164,7 +170,7 @@ span.fake-label {
 .none {
   display: none;
 }
-.select-wrapper>label.mdb-main-label.active {
+.select-wrapper > label.mdb-main-label.active {
   color: gray !important;
 }
 .md-form label.active {
@@ -173,8 +179,8 @@ span.fake-label {
 // .select-wrapper span.caret  {
 //   background-image: url('/assets/images/chevron-down-solid.svg');
 // }
-#column-position{
-  button{
+#column-position {
+  button {
     text-transform: capitalize !important;
   }
 }
@@ -186,7 +192,7 @@ span.fake-label {
   border-radius: 0;
   outline: none;
   box-shadow: none;
-  transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   width: 100%;
   margin-bottom: 0px !important;
 }
@@ -195,12 +201,25 @@ span.fake-label {
 }
 .other-job {
   min-height: 40px;
-  .form-check{
+  .form-check {
     padding-left: 0px;
     padding-bottom: 5px;
   }
 }
-.md-form input:not([type]):focus:not([readonly])+label, .md-form input[type="text"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="password"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="email"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="url"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="time"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="date"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="datetime"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="datetime-local"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="tel"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="number"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="search"]:not(.browser-default):focus:not([readonly])+label, .md-form input[type="search-md"]:focus:not([readonly])+label, .md-form textarea.md-textarea:focus:not([readonly])+label {
+.md-form input:not([type]):focus:not([readonly]) + label,
+.md-form input[type="text"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="password"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="email"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="url"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="time"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="date"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="datetime"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="datetime-local"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="tel"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="number"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="search"]:not(.browser-default):focus:not([readonly]) + label,
+.md-form input[type="search-md"]:focus:not([readonly]) + label,
+.md-form textarea.md-textarea:focus:not([readonly]) + label {
   color: #495057 !important;
 }
 .country-dropdown {
@@ -211,7 +230,7 @@ span.fake-label {
   border-radius: 0;
   outline: none;
   box-shadow: none;
-  transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   width: 100%;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -223,16 +242,16 @@ span.fake-label {
   .country-dropdown {
     margin-top: -2px;
   }
-  .state-dropdown{
+  .state-dropdown {
     margin-bottom: -2px !important;
   }
 }
 .remove-class {
-    padding: 0px !important;
-    height: initial !important;
-    word-break: unset !important;
-    white-space: nowrap !important;
-    line-height: 20px !important;
-    color: white !important;
-    font-size: 14px !important;
+  padding: 0px !important;
+  height: initial !important;
+  word-break: unset !important;
+  white-space: nowrap !important;
+  line-height: 20px !important;
+  color: white !important;
+  font-size: 14px !important;
 }
