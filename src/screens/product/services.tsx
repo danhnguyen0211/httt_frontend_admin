@@ -1,12 +1,8 @@
-import { postService } from "services/config";
+import { getService } from "services/config";
 
-export const checkLogin = async (username: string, password: string) => {
+export const getItemById = async id => {
   try {
-    const body = {
-      username,
-      password
-    };
-    const response = await postService("login", body, false, false, false);
+    const response = await getService(`item/${id}`, null, false, false);
     return response;
   } catch (error) {
     throw error;

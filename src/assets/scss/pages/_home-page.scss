@@ -1,0 +1,42 @@
+.homepage {
+  width: 100%;
+  height: 100vh;
+  background-image: url("http://nhanam.com.vn/Content/images/bg_pattern.jpg");
+}
+
+.item-row {
+  .col-3 {
+    img {
+      width: 80% !important;
+      height: 286px !important;
+    }
+  }
+}
+
+.title {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10%;
+  img {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    margin-left: -50px;
+  }
+  span {
+    position: relative;
+    font-weight: bold;
+    color: white;
+    margin-left: -100px;
+  }
+}
+.content-container {
+  background-image: url("http://nhanam.com.vn/Content/images/bg_pattern.jpg");
+}
+.bookshelf {
+  margin-top: -20.5%;
+  width: 120%;
+  margin-left: -10%;
+}

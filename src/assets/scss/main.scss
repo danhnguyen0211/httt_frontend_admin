@@ -1,6 +1,8 @@
 //@import "helper/variables";
 //@import "helper/mixin";
 @import "common/_global";
+@import "common/_width";
+@import "common/_custom";
 
 //@import "components/button";
 //@import "components/text";
@@ -13,4 +15,4 @@
 //@import "components/list";
 //@import "components/comment";
 @import "pages/login-page";
-
+@import "pages/_home-page";

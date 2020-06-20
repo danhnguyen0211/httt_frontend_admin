@@ -1,18 +1,15 @@
-interface IProps extends IDispatchToProps, IStateToProps {
-  username: string;
-  password: string;
-  repeat_password: string;
-  flipped: boolean;
-}
+interface IProps extends IDispatchToProps, IStateToProps {}
 
 interface IDispatchToProps {
-  logInAction?: (username: string, password: string) => void;
+  getAllItemsAction?: () => void;
+  getAllCategoriesAction?: () => void;
 }
 
-interface IStateToProps {}
-
-interface IState {
-  logInAction?: (username: string, password: string) => void;
+interface IStateToProps {
+  listItems: any;
+  listCategories: any;
 }
+
+interface IState {}
 
 export { IProps, IState };

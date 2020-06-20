@@ -1,7 +1,8 @@
 import { createActions } from "redux-actions";
 
 const actions = createActions({
-  LOG_IN_ACTION: (username, password) => ({ username, password })
+  GET_ITEM_BY_ID_ACTION: id => ({ id }),
+  SET_ITEM_ACTION: data => ({ data })
 });
 
-export const { logInAction, signUpAction } = actions;
+export const { getItemByIdAction, setItemAction } = actions;

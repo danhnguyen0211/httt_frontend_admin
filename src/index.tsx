@@ -49,7 +49,7 @@ ReactDOM.render(
             <Route exact path="/home" component={HomeComponent} />
           </Route>
           <Route path="/product">
-            <Route exact path="/product" component={ProductComponent} />
+            <Route exact path="/product/:id" component={ProductComponent} />
           </Route>
           <Route path="/cart">
             <Route exact path="/cart" component={CartComponent} />
