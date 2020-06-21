@@ -6,6 +6,9 @@ interface IDispatchToProps {
   getAllItemsAction?: () => void;
   getAddressesByIdAction?: (id) => void;
   setListAddressesAction?: (data: any) => void;
+  addNewAddressAction?: (address: string, zipcode: string, isDefault: number, customerId: number) => void;
+  editAddressAction?: (id: number, address: string, zipcode: string, isDefault: number, customerId: number) => void;
+  deleteAddressAction?: (id: number) => void;
 }
 
 interface IStateToProps {
@@ -18,16 +21,11 @@ interface IState {
   modalAddStatus: boolean;
   modalEditStatus: boolean;
   searchKey: string;
-  itemOrder?: any;
-  totalCost: number;
-  searchKeyCustomer: string;
-  currentCustomer: any;
-  currentPayment: any;
-  currentShipping: any;
-  currentAccount: any;
-  currentAddress: any;
-  code: string;
-  paymentStatus: string;
+  zipcode: string;
+  address: string;
+  isDefault: boolean;
+  customerId: number;
+  id: number;
 }
 
 export { IProps, IState };

@@ -37,13 +37,13 @@ class OrderScreen extends React.Component<IProps> {
         name: "Created Date",
         selector: "createdDate",
         sortable: true,
-        width: "300px"
+        width: "150px"
       },
       {
         name: "Code",
         selector: "code",
         sortable: true,
-        width: "200px"
+        width: "100px"
       },
       {
         name: "Payment Status",
@@ -59,27 +59,27 @@ class OrderScreen extends React.Component<IProps> {
       },
       {
         name: "Payment Method",
-        // selector: "",
-        // sortable: true,
+        selector: "payment.method",
+        sortable: true,
         width: "100px"
       },
       {
         name: "Shipping Info",
-        // selector: "Shipping Info",
-        // sortable: true,
-        width: "100px"
+        selector: "shipping.type",
+        sortable: true,
+        width: "150px"
       },
       {
         name: "Customer",
-        // selector: "totalCost",
-        // sortable: true,
-        width: "100px"
+        selector: "customer.name",
+        sortable: true,
+        width: "150px"
       },
       {
         name: "Address",
-        // selector: "totalCost",
-        // sortable: true,
-        width: "100px"
+        selector: "address.address",
+        sortable: true,
+        width: "200px"
       },
       {
         name: "Options",

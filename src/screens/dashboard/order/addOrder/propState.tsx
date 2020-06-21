@@ -2,14 +2,28 @@ interface IProps extends IDispatchToProps, IStateToProps {}
 
 interface IDispatchToProps {
   getAllItemsAction?: () => void;
-  getAllCustomersAction?: () => void;
+  getAllAddressesAction?: () => void;
+  getAllShippingsAction?: () => void;
+  getAllPaymentsAction?: () => void;
   setListItemsCartAction?: (data: any) => void;
+  addOrderAction?: (
+    code: string,
+    paymentStatus: string,
+    totalCost: number,
+    paymentId: number,
+    shippingId: number,
+    accountId: number,
+    addressId: number
+  ) => void;
 }
 
 interface IStateToProps {
   listItems: any;
-  listCustomers: any;
+  listShipping: any;
+  listPayment: any;
+  listAddresses: any;
   listCart: any;
+  account: any;
 }
 
 interface IState {
@@ -19,13 +33,14 @@ interface IState {
   itemOrder?: any;
   totalCost: number;
   searchKeyCustomer: string;
-  currentCustomer: any;
   currentPayment: any;
   currentShipping: any;
   currentAccount: any;
   currentAddress: any;
   code: string;
-  paymentStatus: string;
+  paymentStatus: boolean;
+  optionPayments: any;
+  optionShippings: any;
 }
 
 export { IProps, IState };

@@ -1,13 +1,15 @@
 import ContainerComponent from "containers/components/layout/container";
-import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, MDBTable } from "mdbreact";
+import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, MDBSelect, MDBTable } from "mdbreact";
+import moment from "moment";
 import React from "react";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getAllCustomersAction } from "../../customer/redux/actions";
+import { getAllAddressesAction } from "../../customer/redux/actions";
 import { getAllItemsAction } from "../../item/redux/actions";
-import { setListItemsCartAction } from "../redux/actions";
-// import {getAllShippingsAction} from "../../"
+import { getAllPaymentsAction } from "../../payment/redux/actions";
+import { getAllShippingsAction } from "../../shipping/redux/actions";
+import { addOrderAction, setListItemsCartAction } from "../redux/actions";
 import { IProps, IState } from "./propState";
 
 class AddOrderScreen extends React.Component<IProps> {
@@ -18,13 +20,14 @@ class AddOrderScreen extends React.Component<IProps> {
     itemOrder: [],
     totalCost: 0,
     searchKeyCustomer: "",
-    currentCustomer: null,
     currentPayment: null,
     currentShipping: null,
     currentAccount: null,
     currentAddress: null,
-    code: null,
-    paymentStatus: null
+    code: moment(new Date()).format("hhmmssDDMMYYYY"),
+    paymentStatus: null,
+    optionPayments: [],
+    optionShippings: []
   };
 
   static getDerivedStateFromProps(state, props) {
@@ -38,7 +41,9 @@ class AddOrderScreen extends React.Component<IProps> {
 
   componentDidMount() {
     this.props.getAllItemsAction();
-    this.props.getAllCustomersAction();
+    this.props.getAllAddressesAction();
+    this.props.getAllPaymentsAction();
+    this.props.getAllShippingsAction();
   }
 
   toggleModalAdd = () => {
@@ -69,9 +74,9 @@ class AddOrderScreen extends React.Component<IProps> {
     });
   };
 
-  chooseCustomer = customer => () => {
+  chooseCustomer = address => () => {
     this.setState({
-      currentCustomer: customer
+      currentAddress: address
     });
   };
 
@@ -104,16 +109,34 @@ class AddOrderScreen extends React.Component<IProps> {
     // }
   };
 
-  // confirmOrder = (
-  //   createdDate: Date,
-  //   code: string,
-  //   paymentStatus: string,
-  //   totalCost: number,
-  //   paymentId: number,
-  //   shippingId: number,
-  //   accountId: number,
-  //   addressId: number
-  // ) => {};
+  confirmOrder = () => {
+    console.log(
+      this.state.code,
+      this.state.paymentStatus,
+      this.state.totalCost,
+      this.state.currentPayment,
+      this.state.currentShipping,
+      this.props.account.id,
+      this.state.currentAddress.id
+    );
+    this.props.addOrderAction(
+      this.state.code,
+      this.state.paymentStatus ? "paid" : "unpaid",
+      this.state.totalCost,
+      this.state.currentPayment,
+      this.state.currentShipping,
+      this.props.account.id,
+      this.state.currentAddress.id
+    );
+  };
+
+  handleSelectShippingChange = event => {
+    this.setState({ ...this.state, currentShipping: event[0] });
+  };
+
+  handleSelectPaymentChange = event => {
+    this.setState({ ...this.state, currentPayment: event[0] });
+  };
 
   handleChange = (field: string) => (event: any) => {
     event.persist();
@@ -216,13 +239,13 @@ class AddOrderScreen extends React.Component<IProps> {
     const columnCustomer = [
       {
         name: "Name",
-        selector: "name",
+        selector: "customer.name",
         sortable: true,
         width: "200px"
       },
       {
-        name: "Phone",
-        selector: "phone",
+        name: "Address",
+        selector: "address",
         sortable: true,
         width: "100px"
       },
@@ -244,8 +267,24 @@ class AddOrderScreen extends React.Component<IProps> {
     const data = this.props.listItems.data.filter(x => {
       return x.product.name.toLowerCase().includes(this.state.searchKey.toLowerCase());
     });
-    const dataCustomer = this.props.listCustomers.data.filter(x => {
-      return x.name.toLowerCase().includes(this.state.searchKeyCustomer.toLowerCase());
+    const dataCustomer = this.props.listAddresses.filter(x => {
+      return x.customer.name.toLowerCase().includes(this.state.searchKeyCustomer.toLowerCase());
+    });
+
+    this.props.listPayment.data.map(x => {
+      let listPayment = {
+        text: x.method,
+        value: x.id
+      };
+      this.state.optionPayments.push(listPayment);
+    });
+
+    this.props.listShipping.data.map(x => {
+      let listShipping = {
+        text: x.type,
+        value: x.id
+      };
+      this.state.optionShippings.push(listShipping);
     });
 
     return (
@@ -268,12 +307,30 @@ class AddOrderScreen extends React.Component<IProps> {
               </MDBCol>
               <MDBCol md="3">
                 <MDBRow>
-                  <MDBCol>Khách hàng: {this.state.currentCustomer ? this.state.currentCustomer.name : null}</MDBCol>
+                  <MDBCol>
+                    Khách hàng: {this.state.currentAddress ? this.state.currentAddress.customer.name : null}
+                  </MDBCol>
                 </MDBRow>
                 <MDBBtn onClick={this.handleChange("searchKeyCustomer")}>Thêm khách hàng mới</MDBBtn>
                 <MDBRow>
                   <MDBInput hint="Search" type="text" containerClass="mt-0" />
                   <DataTable columns={columnCustomer} theme="solarized" data={dataCustomer} />
+                </MDBRow>
+                <MDBRow>
+                  <MDBSelect
+                    options={this.state.optionPayments}
+                    selected="Choose payment method"
+                    label="Payment Method"
+                    getValue={this.handleSelectPaymentChange}
+                  />
+                </MDBRow>
+                <MDBRow>
+                  <MDBSelect
+                    options={this.state.optionShippings}
+                    selected="Choose shipping info"
+                    label="Shipping Info"
+                    getValue={this.handleSelectShippingChange}
+                  />
                 </MDBRow>
                 <MDBRow>
                   <MDBRow>
@@ -284,7 +341,20 @@ class AddOrderScreen extends React.Component<IProps> {
                           <td>{this.state.totalCost}</td>
                         </tr>
                       </MDBTable>
-                      <MDBBtn color="primary">Thanh toán</MDBBtn>
+                      <MDBInput
+                        checked={this.state.paymentStatus}
+                        label="Default unchecked"
+                        type="checkbox"
+                        id="checkbox1"
+                        onChange={() => {
+                          this.setState({
+                            paymentStatus: !this.state.paymentStatus
+                          });
+                        }}
+                      />
+                      <MDBBtn color="primary" onClick={this.confirmOrder}>
+                        Thanh toán
+                      </MDBBtn>
                     </MDBCol>
                   </MDBRow>
                 </MDBRow>
@@ -300,12 +370,24 @@ class AddOrderScreen extends React.Component<IProps> {
 const mapStateToProps = state => {
   return {
     listItems: state.screen.item,
-    listCustomers: state.screen.customer,
+    listAddresses: state.screen.customer.dataAddress,
     listCart: state.screen.order,
-    listShipping: state.screen.shipping
+    listShipping: state.screen.shipping,
+    listPayment: state.screen.payment,
+    account: state.screen.accountInfo.accountInfo
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators({ getAllItemsAction, getAllCustomersAction, setListItemsCartAction }, dispatch);
+  bindActionCreators(
+    {
+      getAllItemsAction,
+      getAllAddressesAction,
+      setListItemsCartAction,
+      getAllShippingsAction,
+      getAllPaymentsAction,
+      addOrderAction
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOrderScreen);

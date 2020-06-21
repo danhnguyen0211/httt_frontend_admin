@@ -21,13 +21,13 @@ import OrderScreenComponent from "screens/dashboard/order/component";
 import PaymentScreenComponent from "screens/dashboard/payment/component";
 import ProductScreenComponent from "screens/dashboard/product/component";
 import ShippingScreenComponent from "screens/dashboard/shipping/component";
+import StatsAccountComponent from "screens/dashboard/statistics-account/component";
 import StatisticScreenComponent from "screens/dashboard/statistics/component";
 import UserScreenComponent from "screens/dashboard/user/component";
 import HomeComponent from "screens/home";
 import LoginComponent from "screens/login";
 import ProductComponent from "screens/product";
 import SignupComponent from "screens/signup";
-import StatsComponent from "screens/stats/component";
 import "./assets/scss/main.scss";
 import configureStore from "./boot/configureStore";
 
@@ -76,10 +76,8 @@ ReactDOM.render(
             <PrivateRoute exact path="/dashboard/shipping" component={ShippingScreenComponent} />
             <PrivateRoute exact path="/dashboard/payment" component={PaymentScreenComponent} />
             <PrivateRoute exact path="/dashboard/statistic" component={StatisticScreenComponent} />
+            <PrivateRoute exact path="/dashboard/statistic-account" component={StatsAccountComponent} />
           </PrivateRoute>
-          <Route path="/stats">
-            <Route exact path="/stats" component={StatsComponent} />
-          </Route>
           <Route path="/settings-page"></Route>
           <Route component={Page404Component} />
         </Switch>

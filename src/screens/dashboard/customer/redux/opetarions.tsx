@@ -15,7 +15,9 @@ import {
 import {
   addNewAddressAction,
   addNewCustomerAction,
+  deleteAddressAction,
   deleteCustomerAction,
+  editAddressAction,
   editCustomerAction,
   getAddressesByIdAction,
   getAllAddressesAction,
@@ -146,7 +148,7 @@ function* getAddressesByIdActionWatcher() {
       const { id } = payload;
       const result = yield call(getAddressesById, id);
       if (result.success === true) {
-        yield put(setListAddressesAction(result.data));
+        yield put(setListAddressesAction(result.data.addresses));
       } else {
         logError(result.message);
       }
@@ -165,6 +167,7 @@ function* addNewAddressActionWatcher() {
       const { address, zipCode, isDefault, customerId } = payload;
       const result = yield call(addNewAddress, address, zipCode, isDefault, customerId);
       if (result && result.success === true) {
+        console.log(result.data, "1");
         const data = yield select(state => state.screen.customer);
         data.dataAddress.unshift(result.data);
         yield put(setListAddressesAction(data.dataAddress));
@@ -180,14 +183,17 @@ function* addNewAddressActionWatcher() {
 }
 
 function* editAddressActionWatcher() {
-  yield takeLatest(editCustomerAction, function*({ payload }: any) {
+  yield takeLatest(editAddressAction, function*({ payload }: any) {
     try {
       yield put(onLoadingAction());
       const { id, address, zipCode, isDefault, customerId } = payload;
       const result = yield call(editAddress, id, address, zipCode, isDefault, customerId);
       if (result && result.success === true) {
+        console.log(result.data, "2");
+
         const data = yield select(state => state.screen.customer);
-        data.data.map(x => {
+        console.log(data, " 12");
+        data.dataAddress.map(x => {
           if (x.id === id) {
             x.address = address;
             x.zipCode = zipCode;
@@ -208,7 +214,7 @@ function* editAddressActionWatcher() {
 }
 
 function* deleteAddressActionWatcher() {
-  yield takeLatest(deleteCustomerAction, function*({ payload }: any) {
+  yield takeLatest(deleteAddressAction, function*({ payload }: any) {
     try {
       yield put(onLoadingAction());
       const { id } = payload;
@@ -216,7 +222,7 @@ function* deleteAddressActionWatcher() {
       if (result && result.success === true) {
         const data = yield select(state => state.screen.customer);
         if (data) {
-          data.data.map((x, index) => {
+          data.dataAddress.map((x, index) => {
             if (x.id === id) {
               data.data.splice(index, 1);
             }

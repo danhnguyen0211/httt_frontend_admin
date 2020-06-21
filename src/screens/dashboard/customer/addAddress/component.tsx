@@ -1,10 +1,26 @@
 import ContainerComponent from "containers/components/layout/container";
-import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdbreact";
+import {
+  MDBBtn,
+  MDBCol,
+  MDBContainer,
+  MDBInput,
+  MDBModal,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBModalHeader,
+  MDBRow
+} from "mdbreact";
 import React from "react";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { getAddressesByIdAction, setListAddressesAction } from "../redux/actions";
+import {
+  addNewAddressAction,
+  deleteAddressAction,
+  editAddressAction,
+  getAddressesByIdAction,
+  setListAddressesAction
+} from "../redux/actions";
 // import {getAllShippingsAction} from "../../"
 import { IProps, IState } from "./propState";
 
@@ -13,30 +29,19 @@ class AddAddressScreen extends React.Component<IProps> {
     modalAddStatus: false,
     modalEditStatus: false,
     searchKey: "",
-    itemOrder: [],
-    totalCost: 0,
-    searchKeyCustomer: "",
-    currentCustomer: null,
-    currentPayment: null,
-    currentShipping: null,
-    currentAccount: null,
-    currentAddress: null,
-    code: null,
-    paymentStatus: null
+    zipcode: null,
+    address: null,
+    isDefault: false,
+    customerId: null,
+    id: null
   };
-
-  static getDerivedStateFromProps(state, props) {
-    if (props.listCart !== state.itemOrder) {
-      return {
-        itemOrder: props.listCart
-      };
-    }
-    return null;
-  }
 
   async componentDidMount() {
     // this.props.getAllAddressesAction();
     let id = await localStorage.getItem("router");
+    this.setState({
+      customerId: id
+    });
     this.props.getAddressesByIdAction(id);
     console.log(this.props.listCustomers.dataAddress, "0");
   }
@@ -53,13 +58,41 @@ class AddAddressScreen extends React.Component<IProps> {
     });
   };
 
-  saveAdd = () => {};
+  openModalEdit = (id: number, address: string, zipcode: string, isDefault: number) => () => {
+    this.setState({
+      modalEditStatus: true,
+      id,
+      address,
+      zipcode,
+      isDefault
+    });
+  };
 
-  saveEdit = () => {};
+  saveAdd = () => {
+    this.props.addNewAddressAction(
+      this.state.address,
+      this.state.zipcode,
+      this.state.isDefault ? 1 : 0,
+      this.state.customerId
+    );
+    this.toggleModalAdd();
+  };
 
-  delete = item => () => {
+  saveEdit = () => {
+    this.props.editAddressAction(
+      this.state.id,
+      this.state.address,
+      this.state.zipcode,
+      this.state.isDefault ? 1 : 0,
+      this.state.customerId
+    );
+    this.toggleModalEdit();
+  };
+
+  delete = (id: number) => () => {
+    this.props.deleteAddressAction(id);
     this.props.listCustomers.dataAddress.map((x, index) => {
-      if (x.id === item.id) {
+      if (x.id === id) {
         this.props.listCustomers.dataAddress.splice(index, 1);
         this.props.setListAddressesAction(this.props.listCustomers.dataAddress);
       }
@@ -72,6 +105,83 @@ class AddAddressScreen extends React.Component<IProps> {
   };
 
   render() {
+    const modalAddUser = this.state.modalAddStatus ? (
+      <MDBModal isOpen={this.state.modalAddStatus} toggle={this.toggleModalAdd}>
+        <MDBModalHeader toggle={this.toggleModalAdd}>
+          <strong>Add a new address</strong>
+        </MDBModalHeader>
+        <MDBModalBody>
+          <MDBInput
+            label="Address"
+            value={this.state.address ? this.state.address : ""}
+            onChange={this.handleChange("address")}
+          />
+          <MDBInput
+            label="Zipcode"
+            value={this.state.zipcode ? this.state.zipcode : ""}
+            onChange={this.handleChange("zipcode")}
+          />
+          <MDBInput
+            label="Is default?"
+            type="checkbox"
+            id="checkbox1"
+            checked={this.state.isDefault}
+            onChange={() => {
+              this.setState({
+                isDefault: !this.state.isDefault
+              });
+            }}
+          />
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={this.toggleModalAdd}>
+            Close
+          </MDBBtn>
+          <MDBBtn color="primary" onClick={this.saveAdd}>
+            Save
+          </MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
+    ) : null;
+
+    const modalEditUser = this.state.modalEditStatus ? (
+      <MDBModal isOpen={this.state.modalEditStatus} toggle={this.toggleModalEdit}>
+        <MDBModalHeader toggle={this.toggleModalEdit}>
+          <strong>Edit the address</strong>
+        </MDBModalHeader>
+        <MDBModalBody>
+          <MDBInput
+            label="Address"
+            value={this.state.address ? this.state.address : ""}
+            onChange={this.handleChange("address")}
+          />
+          <MDBInput
+            label="Zipcode"
+            value={this.state.zipcode ? this.state.zipcode : ""}
+            onChange={this.handleChange("zipcode")}
+          />
+          <MDBInput
+            label="Is default?"
+            type="checkbox"
+            id="checkbox1"
+            checked={this.state.isDefault}
+            onChange={() => {
+              this.setState({
+                isDefault: !this.state.isDefault
+              });
+            }}
+          />
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={this.toggleModalEdit}>
+            Close
+          </MDBBtn>
+          <MDBBtn color="primary" onClick={this.saveEdit}>
+            Save
+          </MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
+    ) : null;
     const columns = [
       {
         name: "Address",
@@ -92,16 +202,11 @@ class AddAddressScreen extends React.Component<IProps> {
         width: "100px"
       },
       {
-        name: "Customer",
-        selector: "customerId",
-        sortable: true,
-        width: "100px"
-      },
-      {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn onClick={this.delete(row)}>Delete</MDBBtn>
+            <MDBBtn onClick={this.openModalEdit(row.id, row.address, row.zipCode, row.isDefault)}>Edit</MDBBtn>
+            <MDBBtn onClick={this.delete(row.id)}>Delete</MDBBtn>
           </div>
         ),
         right: true,
@@ -112,24 +217,21 @@ class AddAddressScreen extends React.Component<IProps> {
       }
     ];
 
-    // const data = this.props.listCustomers.dataAddress.filter(x => {
-    //   return x.address.toLowerCase().includes(this.state.searchKey.toLowerCase());
-    // });
+    const data = this.props.listCustomers.dataAddress.filter(x => {
+      return x.address.toLowerCase().includes(this.state.searchKey.toLowerCase());
+    });
 
     return (
       <ContainerComponent>
+        {modalAddUser}
+        {modalEditUser}
         <MDBContainer>
           <MDBRow>
             <MDBRow>
+              <MDBBtn onClick={this.toggleModalAdd}>Add a new address</MDBBtn>
               <MDBCol md="12">
                 <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
-                <DataTable
-                  title="Address"
-                  columns={columns}
-                  theme="solarized"
-                  data={this.props.listCustomers.dataAddress}
-                  pagination={true}
-                />
+                <DataTable title="Address" columns={columns} theme="solarized" data={data} pagination={true} />
               </MDBCol>
             </MDBRow>
           </MDBRow>
@@ -145,6 +247,9 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators({ getAddressesByIdAction, setListAddressesAction }, dispatch);
+  bindActionCreators(
+    { getAddressesByIdAction, setListAddressesAction, addNewAddressAction, editAddressAction, deleteAddressAction },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddAddressScreen);
