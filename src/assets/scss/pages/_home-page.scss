@@ -40,3 +40,14 @@
   width: 120%;
   margin-left: -10%;
 }
+.product-info {
+  img {
+    width: 80%;
+    height: auto;
+  }
+  p {
+    span {
+      font-weight: bold;
+    }
+  }
+}

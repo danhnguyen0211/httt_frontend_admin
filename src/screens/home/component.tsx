@@ -1,5 +1,6 @@
 import CustomerBar from "containers/components/layout/customerBar";
 import TopNavComponent from "containers/components/layout/top-nav";
+import config from "containers/config";
 import { MDBCol, MDBContainer, MDBRow } from "mdbreact";
 import React from "react";
 import { connect } from "react-redux";
@@ -27,9 +28,7 @@ class HomeComponent extends React.Component<IProps> {
       const row = items.map(item => (
         <MDBCol key={item.id} size="3">
           <Link to={`/product/${item.id}`}>
-            <img
-              src={`http://localhost:9605/${item.product.image[0] ? item.product.image[0].url : "noimage.jpg"}`}
-            ></img>
+            <img src={`${config.HOST_API}/${item.product.image[0] ? item.product.image[0].url : "noimage.jpg"}`}></img>
           </Link>
         </MDBCol>
       ));

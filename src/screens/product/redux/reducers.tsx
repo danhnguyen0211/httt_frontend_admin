@@ -6,7 +6,7 @@ export default handleActions<IActionState, any>(
   {
     [setItemAction.toString()]: (state, action) => ({
       ...state,
-      dta: action.payload.data
+      data: action.payload.data
     })
   },
   {
