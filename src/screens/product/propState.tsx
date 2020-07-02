@@ -9,6 +9,8 @@ interface IStateToProps {
   match: any;
 }
 
-interface IState {}
+interface IState {
+  quantity: number;
+}
 
 export { IProps, IState };

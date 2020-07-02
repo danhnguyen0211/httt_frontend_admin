@@ -63,7 +63,6 @@ class ItemsScreen extends React.Component<IProps> {
   };
 
   render() {
-    console.log(this.props, "hello");
     // const modalAddItem = this.state.modalEditStatus ? (
     //   <MDBModal isOpen={this.state.modalEditStatus} toggle={this.toggleModalEdit}>
     //     <MDBModalHeader toggle={this.toggleModalEdit}>
