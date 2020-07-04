@@ -1,5 +1,5 @@
+import TopNavComponent from "containers/components/layout/client-top-nav";
 import CustomerBar from "containers/components/layout/customerBar";
-import TopNavComponent from "containers/components/layout/top-nav";
 import config from "containers/config";
 import { MDBCol, MDBContainer, MDBRow } from "mdbreact";
 import React from "react";

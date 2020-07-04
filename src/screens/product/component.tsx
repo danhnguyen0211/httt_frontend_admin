@@ -1,5 +1,6 @@
 import Cart from "containers/components/layout/cart";
-import TopNavComponent from "containers/components/layout/top-nav";
+import TopNavComponent from "containers/components/layout/client-top-nav";
+import CustomerBar from "containers/components/layout/customerBar";
 import config from "containers/config";
 import { MDBCol, MDBContainer, MDBRow } from "mdbreact";
 import React from "react";
@@ -7,6 +8,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { IProps, IState } from "./propState";
 import { getItemByIdAction } from "./redux/actions";
+
 class ProductComponent extends React.Component<IProps> {
   state: IState = {
     quantity: 0
@@ -33,9 +35,9 @@ class ProductComponent extends React.Component<IProps> {
       orderCode,
       itemId: this.props.item.data.id,
       quantity: this.state.quantity,
-      cost:
-        this.state.quantity *
-        (this.props.item.data.sellingPrice - (this.props.item.data.sellingPrice * this.props.item.data.sale) / 100),
+      // cost:
+      //   this.state.quantity *
+      //   (this.props.item.data.sellingPrice - (this.props.item.data.sellingPrice * this.props.item.data.sale) / 100),
       item: this.props.item.data
     };
     if (Number(obj.quantity) > 0) {
@@ -68,15 +70,15 @@ class ProductComponent extends React.Component<IProps> {
         item.sale === 0 ? (
           <div>
             <div>
-              <p>Giá sách: {item.sellingPrice}</p>
+              <p className="price-tag">Giá sách: {item.sellingPrice}VNĐ</p>
             </div>
           </div>
         ) : (
           <div>
-            <p>
+            <p className="old-price">
               Giá sách: <span>{item.sellingPrice}VNĐ</span>
             </p>
-            <p>
+            <p className="price-tag">
               Giá khuyến mại: <span>{item.sellingPrice - (item.sellingPrice * item.sale) / 100}VNĐ</span>
             </p>
           </div>
@@ -85,46 +87,63 @@ class ProductComponent extends React.Component<IProps> {
         {}
       );
     };
+
+    const title = () => {
+      return (
+        <button className="cart-btn" onClick={() => this.setOrderCode()}>
+          Thêm vào giỏ hàng
+        </button>
+      );
+    };
     return (
       <MDBContainer fluid>
         <TopNavComponent />
-        <MDBContainer>
-          <MDBRow className="product-info">
-            <MDBCol size="4">
-              <img src={`${config.HOST_API}/${url}`}></img>
-            </MDBCol>
-            <MDBCol size="4">
-              <h3>{item.product ? item.product.name : "noimage.jpg"}</h3>
-              <p>
-                Mã sản phẩm: <span>{item.product ? item.product.code : ""}</span>
-              </p>
-              <p>
-                Tác giả: <span>{item.product ? item.product.author : ""}</span>
-              </p>
-              <p>
-                NXB: <span>{item.product ? item.product.publisher : ""}</span>
-              </p>
-              <p>
-                Thể loại: <span> {item.product ? item.product.category.name : ""}</span>
-              </p>
-              <p>
-                Số lượng: <span>{item.product ? item.product.quantity : ""} quyển</span>
-              </p>
-            </MDBCol>
-            <MDBCol size="4">
-              {priceTag(item)}
-              <div>
-                <input type="number" defaultValue={0} onChange={this.handleChange("quantity")}></input>
-                <button onClick={() => this.setOrderCode()}>Thêm vào giỏ hàng</button>
-                <Cart title="Mua ngay"></Cart>
-              </div>
-            </MDBCol>
-          </MDBRow>
-          <MDBRow>
-            <h2>Giới thiệu sách</h2>
-            <p>{item.product ? item.product.description : ""}</p>
-          </MDBRow>
-          <MDBRow></MDBRow>
+        <CustomerBar></CustomerBar>
+        <MDBContainer fluid className="product-info-container">
+          <MDBContainer className="product-info">
+            <MDBRow className="product-info">
+              <MDBCol size="4">
+                <img src={`${config.HOST_API}/${url}`}></img>
+              </MDBCol>
+              <MDBCol size="4">
+                <h3>{item.product ? item.product.name : "noimage.jpg"}</h3>
+                <p>
+                  Mã sản phẩm: <span>{item.product ? item.product.code : ""}</span>
+                </p>
+                <p>
+                  Tác giả: <span>{item.product ? item.product.author : ""}</span>
+                </p>
+                <p>
+                  NXB: <span>{item.product ? item.product.publisher : ""}</span>
+                </p>
+                <p>
+                  Thể loại: <span> {item.product ? item.product.category.name : ""}</span>
+                </p>
+                <p>
+                  Số lượng: <span>{item.product ? item.product.quantity : ""} quyển</span>
+                </p>
+              </MDBCol>
+              <MDBCol size="4">
+                {priceTag(item)}
+                <div>
+                  <input
+                    type="number"
+                    defaultValue={0}
+                    min={1}
+                    max={item.product ? item.product.quantity : 1}
+                    onChange={this.handleChange("quantity")}
+                  ></input>
+                  <Cart handleClick={this.setOrderCode} title={title()}></Cart>
+                </div>
+              </MDBCol>
+            </MDBRow>
+            <hr></hr>
+            <MDBRow>
+              <h2>Giới thiệu sách</h2>
+              <p>{item.product ? item.product.description : ""}</p>
+            </MDBRow>
+            <MDBRow></MDBRow>
+          </MDBContainer>
         </MDBContainer>
       </MDBContainer>
     );

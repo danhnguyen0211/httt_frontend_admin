@@ -1,5 +1,6 @@
 interface IProps {
-  title: string;
+  title: any;
+  handleClick?: () => void;
 }
 
 interface IState {

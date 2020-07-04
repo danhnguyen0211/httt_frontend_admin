@@ -32,11 +32,9 @@
     margin-left: -100px;
   }
 }
-.content-container {
-  background-image: url("http://nhanam.com.vn/Content/images/bg_pattern.jpg");
-}
+
 .bookshelf {
-  margin-top: -20.5%;
+  margin-top: -27.5%;
   width: 120%;
   margin-left: -10%;
 }
@@ -49,5 +47,86 @@
     span {
       font-weight: bold;
     }
+  }
+}
+
+.price-tag {
+  padding-left: 4px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #015e00;
+  color: white;
+  font-weight: bold;
+}
+
+.old-price {
+  padding-left: 4px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 18px;
+  color: white;
+  background-color: gray;
+  text-decoration: line-through;
+}
+
+.content-container {
+  background-image: url("http://nhanam.com.vn/Content/images/bg_pattern.jpg");
+  // margin-top: -4%;
+  padding-top: 2% !important;
+}
+
+.customer-bar {
+  height: 40px !important;
+  background-image: url("http://nhanam.com.vn/Content/images2/menubg.png");
+}
+
+.client-top-nav-container {
+  .client-top-nav {
+    height: 40px;
+  }
+  .white-text p {
+    margin: 0 !important;
+  }
+}
+
+.cart-btn {
+  margin-top: -20% !important;
+  margin-right: -40px;
+  background-color: #015e00;
+  color: white;
+  padding: 24px 24px;
+}
+.cart-image {
+  width: 275px;
+  height: 325px;
+}
+
+.product-info-container {
+  background-image: url("http://nhanam.com.vn/Content/images/bg_pattern.jpg");
+  .product-info {
+    background-image: url("http://nhanam.com.vn/Content/images2/headerbg.png");
+    padding: 3% 3% 3% 3%;
+  }
+  h3 {
+    color: #015e00;
+  }
+  input {
+    width: 60%;
+    padding: 12px 12px;
+  }
+}
+
+.cart {
+  background: none !important;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30%;
+  i {
+    color: white;
+  }
+  button.cart {
+    padding: 0 !important;
   }
 }
