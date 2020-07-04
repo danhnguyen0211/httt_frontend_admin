@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import { PersistGate } from "redux-persist/integration/react";
 import CartComponent from "screens/cart";
+import CategoryComponent from "screens/category";
 import CheckoutComponent from "screens/checkout";
 import CategoryScreenComponent from "screens/dashboard/category/component";
 import DashBoardComponent from "screens/dashboard/component";
@@ -50,6 +51,9 @@ ReactDOM.render(
           </Route>
           <Route path="/product">
             <Route exact path="/product/:id" component={ProductComponent} />
+          </Route>
+          <Route path="/category">
+            <Route exact path="/category/:category" component={CategoryComponent} />
           </Route>
           <Route path="/cart">
             <Route exact path="/cart" component={CartComponent} />
