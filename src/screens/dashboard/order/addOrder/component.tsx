@@ -1,5 +1,18 @@
 import ContainerComponent from "containers/components/layout/container";
-import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, MDBSelect, MDBTable } from "mdbreact";
+import {
+  MDBBtn,
+  MDBCol,
+  MDBContainer,
+  MDBInput,
+  MDBRow,
+  MDBSelect,
+  MDBTable,
+  MDBIcon,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalBody,
+  MDBModalFooter
+} from "mdbreact";
 import moment from "moment";
 import React from "react";
 import DataTable from "react-data-table-component";
@@ -9,10 +22,10 @@ import { getAllAddressesAction } from "../../customer/redux/actions";
 import { getAllItemsAction } from "../../item/redux/actions";
 import { getAllPaymentsAction } from "../../payment/redux/actions";
 import { getAllShippingsAction } from "../../shipping/redux/actions";
-import { addOrderAction, setListItemsCartAction } from "../redux/actions";
-import { IProps, IState } from "./propState";
+import { addOrderAction, setListItemsCartAction, addCartItemAction, addNewCustomerOrderAction } from "../redux/actions";
+import { IState } from "./propState";
 
-class AddOrderScreen extends React.Component<IProps> {
+class AddOrderScreen extends React.Component<any> {
   state: IState = {
     modalAddStatus: false,
     modalEditStatus: false,
@@ -27,7 +40,31 @@ class AddOrderScreen extends React.Component<IProps> {
     code: moment(new Date()).format("hhmmssDDMMYYYY"),
     paymentStatus: null,
     optionPayments: [],
-    optionShippings: []
+    optionShippings: [],
+    name: null,
+    phone: null,
+    age: null,
+    sex: "Male",
+    username: null,
+    password: null,
+    id: null,
+    address: null,
+    zipCode: null,
+    options: [
+      {
+        checked: true,
+        text: "Male",
+        value: "Male"
+      },
+      {
+        text: "Female",
+        value: "Female"
+      },
+      {
+        text: "Other",
+        value: "Other"
+      }
+    ]
   };
 
   static getDerivedStateFromProps(state, props) {
@@ -45,22 +82,6 @@ class AddOrderScreen extends React.Component<IProps> {
     this.props.getAllPaymentsAction();
     this.props.getAllShippingsAction();
   }
-
-  toggleModalAdd = () => {
-    this.setState({
-      modalAddStatus: !this.state.modalAddStatus
-    });
-  };
-
-  toggleModalEdit = () => {
-    this.setState({
-      modalEditStatus: !this.state.modalEditStatus
-    });
-  };
-
-  saveAdd = () => {};
-
-  saveEdit = () => {};
 
   delete = item => () => {
     this.props.listCart.dataCart.map((x, index) => {
@@ -81,6 +102,7 @@ class AddOrderScreen extends React.Component<IProps> {
   };
 
   addItem = item => () => {
+    const dataCart = this.props.listCart.dataCart;
     let new_item = {
       id: item.id,
       product: item.product,
@@ -90,44 +112,59 @@ class AddOrderScreen extends React.Component<IProps> {
       status: item.status,
       quantity: 1
     };
-    // if (this.state.itemOrder.dataCart && this.state.itemOrder.dataCart.length > 0) {
-    //   this.state.itemOrder.dataCart.map(x => {
-    //     if (x.id === new_item.id) {
-    //       x.quantity = x.quantity + 1;
-    //       this.props.setListItemsCartAction(this.state.itemOrder.dataCart);
-    //     } else {
-    //       this.state.itemOrder.dataCart.push(new_item);
-    //       this.props.setListItemsCartAction(this.state.itemOrder.dataCart);
-    //     }
-    //   });
-    // } else {
-    this.props.listCart.dataCart.push(new_item);
-    this.setState({
-      totalCost: this.state.totalCost + new_item.sellingPrice - (new_item.sellingPrice * new_item.sale) / 100
-    });
-    this.props.setListItemsCartAction(this.props.listCart.dataCart);
-    // }
+    if (dataCart && dataCart.length > 0) {
+      let count = 0;
+      dataCart.map(x => {
+        if (x.id === new_item.id) {
+          count = count + 1;
+          x.quantity = x.quantity + 1;
+          this.props.setListItemsCartAction(dataCart);
+          this.setState({
+            totalCost: this.state.totalCost + item.sellingPrice - (item.sellingPrice * item.sale) / 100
+          });
+        }
+      });
+      if (count === 0) {
+        dataCart.push(new_item);
+        this.props.setListItemsCartAction(dataCart);
+        this.setState({
+          totalCost: this.state.totalCost + item.sellingPrice - (item.sellingPrice * item.sale) / 100
+        });
+      }
+    } else {
+      dataCart.push(new_item);
+      this.setState({
+        totalCost: this.state.totalCost + item.sellingPrice - (item.sellingPrice * item.sale) / 100
+      });
+      this.props.setListItemsCartAction(dataCart);
+    }
   };
 
-  confirmOrder = () => {
-    console.log(
-      this.state.code,
-      this.state.paymentStatus,
-      this.state.totalCost,
-      this.state.currentPayment,
-      this.state.currentShipping,
-      this.props.account.id,
-      this.state.currentAddress.id
-    );
-    this.props.addOrderAction(
-      this.state.code,
-      this.state.paymentStatus ? "paid" : "unpaid",
-      this.state.totalCost,
-      this.state.currentPayment,
-      this.state.currentShipping,
-      this.props.account.id,
-      this.state.currentAddress.id
-    );
+  confirmOrder = async () => {
+    const addressId = await localStorage.getItem("addressId");
+    if (addressId) {
+      this.props.addOrderAction(
+        this.state.code,
+        this.state.paymentStatus ? "paid" : "unpaid",
+        this.state.totalCost,
+        this.state.currentPayment,
+        this.state.currentShipping,
+        this.props.account.id,
+        parseInt(addressId)
+      );
+    } else {
+      this.props.addOrderAction(
+        this.state.code,
+        this.state.paymentStatus ? "paid" : "unpaid",
+        this.state.totalCost,
+        this.state.currentPayment,
+        this.state.currentShipping,
+        this.props.account.id,
+        this.state.currentAddress.id
+      );
+    }
+
+    localStorage.removeItem("addressId");
   };
 
   handleSelectShippingChange = event => {
@@ -141,6 +178,61 @@ class AddOrderScreen extends React.Component<IProps> {
   handleChange = (field: string) => (event: any) => {
     event.persist();
     this.setState(state => ({ ...state, [field]: event.target.value }));
+  };
+
+  saveAdd = () => {
+    this.props.addNewCustomerAction(
+      this.state.name,
+      this.state.phone,
+      this.state.age,
+      this.state.sex,
+      this.state.username,
+      this.state.password
+    );
+    this.setState({
+      modalAddStatus: !this.state.modalAddStatus
+    });
+  };
+
+  handleSelectChange = event => {
+    this.setState({ ...this.state, sex: event[0] });
+  };
+
+  handleChangeCustomer = (field: string) => (event: any) => {
+    event.persist();
+    this.setState(state => ({ ...state, [field]: event.target.value }));
+  };
+
+  toggleModalAdd = () => {
+    this.clear();
+    this.setState({
+      modalAddStatus: !this.state.modalAddStatus
+    });
+  };
+
+  clear = () => {
+    this.setState({
+      name: null,
+      phone: null,
+      age: null,
+      sex: "Male",
+      username: null,
+      password: null
+    });
+  };
+
+  addCustomer = () => {
+    this.props.addNewCustomerOrderAction(
+      this.state.name,
+      this.state.phone,
+      this.state.age,
+      this.state.sex,
+      this.state.username,
+      this.state.password,
+      this.state.address,
+      this.state.zipCode
+    );
+    this.toggleModalAdd();
   };
 
   render() {
@@ -167,26 +259,28 @@ class AddOrderScreen extends React.Component<IProps> {
         name: "Sale",
         selector: "sale",
         sortable: true,
-        width: "100px"
+        width: "70px"
       },
       {
         name: "Quantity",
         selector: "product.quantity",
         sortable: true,
-        width: "100px"
+        width: "70px"
       },
       {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn onClick={this.addItem(row)}>Add</MDBBtn>
+            <MDBBtn floating size="sm" gradient="blue" onClick={this.addItem(row)}>
+              <MDBIcon icon="plus" />
+            </MDBBtn>
           </div>
         ),
         right: true,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
-        width: "200px"
+        width: "100px"
       }
     ];
 
@@ -213,26 +307,28 @@ class AddOrderScreen extends React.Component<IProps> {
         name: "Sale",
         selector: "sale",
         sortable: true,
-        width: "100px"
+        width: "70px"
       },
       {
         name: "Quantity",
         selector: "quantity",
         sortable: true,
-        width: "100px"
+        width: "70px"
       },
       {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn onClick={this.delete(row)}>Delete</MDBBtn>
+            <MDBBtn floating size="sm" gradient="blue" onClick={this.delete(row)}>
+              <MDBIcon icon="trash" />
+            </MDBBtn>
           </div>
         ),
         right: true,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
-        width: "200px"
+        width: "100px"
       }
     ];
 
@@ -241,26 +337,28 @@ class AddOrderScreen extends React.Component<IProps> {
         name: "Name",
         selector: "customer.name",
         sortable: true,
-        width: "200px"
+        width: "130px"
       },
       {
         name: "Address",
         selector: "address",
         sortable: true,
-        width: "100px"
+        width: "170px"
       },
       {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn onClick={this.chooseCustomer(row)}>Add</MDBBtn>
+            <MDBBtn floating size="sm" gradient="blue" onClick={this.chooseCustomer(row)}>
+              <MDBIcon icon="plus" />
+            </MDBBtn>
           </div>
         ),
         right: true,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
-        width: "200px"
+        width: "70px"
       }
     ];
 
@@ -270,6 +368,55 @@ class AddOrderScreen extends React.Component<IProps> {
     const dataCustomer = this.props.listAddresses.filter(x => {
       return x.customer.name.toLowerCase().includes(this.state.searchKeyCustomer.toLowerCase());
     });
+
+    const modalAddUser = this.state.modalAddStatus ? (
+      <MDBModal isOpen={this.state.modalAddStatus} toggle={this.toggleModalAdd}>
+        <MDBModalHeader toggle={this.toggleModalAdd}>
+          <strong>Add a new customer</strong>
+        </MDBModalHeader>
+        <MDBModalBody>
+          <MDBInput
+            label="Name"
+            value={this.state.name ? this.state.name : ""}
+            onChange={this.handleChangeCustomer("name")}
+          />
+          <MDBInput
+            label="Phone"
+            value={this.state.phone ? this.state.phone : ""}
+            onChange={this.handleChangeCustomer("phone")}
+          />
+          <MDBInput
+            label="Age"
+            value={this.state.age ? this.state.age : ""}
+            onChange={this.handleChangeCustomer("age")}
+          />
+          <MDBSelect
+            options={this.state.options}
+            selected="Choose Sex"
+            label="Sex"
+            getValue={this.handleSelectChange}
+          />
+          <MDBInput
+            label="Address"
+            value={this.state.address ? this.state.address : ""}
+            onChange={this.handleChangeCustomer("address")}
+          />
+          <MDBInput
+            label="Zipcode"
+            value={this.state.zipCode ? this.state.zipCode : ""}
+            onChange={this.handleChangeCustomer("zipCode")}
+          />
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="secondary" onClick={this.toggleModalAdd}>
+            Close
+          </MDBBtn>
+          <MDBBtn color="primary" onClick={this.addCustomer}>
+            Save
+          </MDBBtn>
+        </MDBModalFooter>
+      </MDBModal>
+    ) : null;
 
     this.props.listPayment.data.map(x => {
       let listPayment = {
@@ -289,10 +436,11 @@ class AddOrderScreen extends React.Component<IProps> {
 
     return (
       <ContainerComponent>
+        {modalAddUser}
         <MDBContainer>
           <MDBRow>
             <MDBRow>
-              <MDBCol md="9">
+              <MDBCol md="8">
                 <DataTable
                   title="Items in cart"
                   columns={columnItem}
@@ -301,19 +449,31 @@ class AddOrderScreen extends React.Component<IProps> {
                   pagination={true}
                 />
               </MDBCol>
-              <MDBCol md="9">
+              <MDBCol md="8">
                 <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
                 <DataTable title="Items" columns={columns} theme="solarized" data={data} pagination={true} />
               </MDBCol>
-              <MDBCol md="3">
+              <MDBCol md="4">
                 <MDBRow>
                   <MDBCol>
-                    Khách hàng: {this.state.currentAddress ? this.state.currentAddress.customer.name : null}
+                    Khách hàng:{" "}
+                    {this.state.name
+                      ? this.state.name
+                      : this.state.currentAddress
+                      ? this.state.currentAddress.customer.name
+                      : null}
                   </MDBCol>
                 </MDBRow>
-                <MDBBtn onClick={this.handleChange("searchKeyCustomer")}>Thêm khách hàng mới</MDBBtn>
+                <MDBBtn gradient="blue" onClick={this.toggleModalAdd}>
+                  Thêm khách hàng mới
+                </MDBBtn>
                 <MDBRow>
-                  <MDBInput hint="Search" type="text" containerClass="mt-0" />
+                  <MDBInput
+                    hint="Search"
+                    type="text"
+                    containerClass="mt-0"
+                    onChange={this.handleChange("searchKeyCustomer")}
+                  />
                   <DataTable columns={columnCustomer} theme="solarized" data={dataCustomer} />
                 </MDBRow>
                 <MDBRow>
@@ -352,7 +512,7 @@ class AddOrderScreen extends React.Component<IProps> {
                           });
                         }}
                       />
-                      <MDBBtn color="primary" onClick={this.confirmOrder}>
+                      <MDBBtn gradient="blue" color="primary" onClick={this.confirmOrder}>
                         Thanh toán
                       </MDBBtn>
                     </MDBCol>
@@ -385,7 +545,9 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
       setListItemsCartAction,
       getAllShippingsAction,
       getAllPaymentsAction,
-      addOrderAction
+      addOrderAction,
+      addCartItemAction,
+      addNewCustomerOrderAction
     },
     dispatch
   );

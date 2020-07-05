@@ -13,8 +13,8 @@ import {
   getAllCustomers
 } from "../services";
 import {
-  addNewAddressAction,
-  addNewCustomerAction,
+  addNewAddressClientAction,
+  addNewCustomerClientAction,
   deleteAddressAction,
   deleteCustomerAction,
   editAddressAction,
@@ -46,7 +46,7 @@ function* getAllCustomersActionWatcher() {
 }
 
 function* addNewCustomerActionWatcher() {
-  yield takeLatest(addNewCustomerAction, function*({ payload }: any) {
+  yield takeLatest(addNewCustomerClientAction, function*({ payload }: any) {
     try {
       yield put(onLoadingAction());
       const { name, phone, age, sex, username, password } = payload;
@@ -56,7 +56,7 @@ function* addNewCustomerActionWatcher() {
         const data = yield select(state => state.screen.customer);
         data.data.unshift(result.data);
         yield put(setListCustomersAction(data.data));
-        yield put(push("/dashboard/customer/addAddress"));
+        // yield put(push("/dashboard/customer/addAddress"));
       } else {
         logError(result.message);
       }
@@ -164,7 +164,7 @@ function* getAddressesByIdActionWatcher() {
 }
 
 function* addNewAddressActionWatcher() {
-  yield takeLatest(addNewAddressAction, function*({ payload }: any) {
+  yield takeLatest(addNewAddressClientAction, function*({ payload }: any) {
     try {
       yield put(onLoadingAction());
       const { address, zipCode, isDefault, customerId } = payload;

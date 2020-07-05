@@ -39,6 +39,8 @@ class AddAddressScreen extends React.Component<IProps> {
   async componentDidMount() {
     // this.props.getAllAddressesAction();
     let id = await localStorage.getItem("router");
+    console.log(id, "id");
+
     this.setState({
       customerId: id
     });

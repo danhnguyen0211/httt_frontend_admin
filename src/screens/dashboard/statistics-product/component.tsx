@@ -7,9 +7,9 @@ import { bindActionCreators, Dispatch } from "redux";
 import { getAllOrderAction } from "screens/dashboard/order/redux/actions";
 import { IProps } from "./propState";
 
-class StatisticAccountScreen extends React.Component<IProps> {
+class StatisticProductScreen extends React.Component<IProps> {
   state = {
-    accounts: [],
+    customers: [],
     values: []
   };
 
@@ -18,34 +18,33 @@ class StatisticAccountScreen extends React.Component<IProps> {
   }
 
   render() {
-    const { accounts } = this.state;
-    console.log(accounts, "accounts");
+    const { customers } = this.state;
+    console.log(customers, "accounts");
     this.props.listOrder.data.map(x => {
       let item = {
-        username: x.account.username,
-        fullname: x.account.fullName,
-        id: x.account.id,
+        fullname: x.customer.fullName,
+        id: x.customer.id,
         totalRevenue: x.totalCost
       };
-      const accountsId = accounts.map(x => {
+      const accountsId = customers.map(x => {
         return x.id;
       });
-      if (accountsId.indexOf(x.account.id) === -1) {
-        accounts.push(item);
+      if (accountsId.indexOf(x.customer.id) === -1) {
+        customers.push(item);
       }
-      if (accountsId.indexOf(x.account.id) !== -1) {
-        accounts.map(acc => {
-          if (acc.id === x.account.id) {
+      if (accountsId.indexOf(x.customer.id) !== -1) {
+        customers.map(acc => {
+          if (acc.id === x.customer.id) {
             acc.totalRevenue += x.totalCost;
           }
         });
       }
     });
-    const accountNames = accounts.map(x => {
-      return x.username;
+    const accountNames = customers.map(x => {
+      return x.fullName;
     });
 
-    const accountRevenue = accounts.map(x => {
+    const accountRevenue = customers.map(x => {
       return x.totalRevenue;
     });
 
@@ -80,4 +79,4 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({ getAllOrderAction }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatisticAccountScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(StatisticProductScreen);

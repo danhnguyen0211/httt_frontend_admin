@@ -12,7 +12,25 @@ const actions = createActions({
     shippingId,
     accountId,
     addressId
+  }),
+  ADD_CART_ITEM_ACTION: data => ({ data }),
+  ADD_NEW_CUSTOMER_ORDER_ACTION: (name, phone, age, sex, username, password, address, zipCode) => ({
+    name,
+    phone,
+    age,
+    sex,
+    username,
+    password,
+    address,
+    zipCode
   })
 });
 
-export const { getAllOrderAction, setListOrderAction, setListItemsCartAction, addOrderAction } = actions;
+export const {
+  getAllOrderAction,
+  setListOrderAction,
+  setListItemsCartAction,
+  addOrderAction,
+  addCartItemAction,
+  addNewCustomerOrderAction
+} = actions;

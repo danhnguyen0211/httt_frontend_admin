@@ -2,8 +2,9 @@ import config from "containers/config";
 import { MDBBtn, MDBContainer, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader } from "mdbreact";
 import React from "react";
 import { IProps, IState } from "./propState";
+import { withRouter } from "react-router";
 
-class Cart extends React.Component<IProps> {
+class Cart extends React.Component<any> {
   state: IState = {
     modal8: false,
     cartItems: [],
@@ -19,7 +20,7 @@ class Cart extends React.Component<IProps> {
     const cartItems = JSON.parse(localStorage.getItem("cartItems"));
     var total = 0;
     cartItems.map(item => {
-      total += Number(item.quantity) * Number(item.item.sellingPrice);
+      total += Number(item.quantity) * (item.item.sellingPrice - (item.item.sellingPrice * item.item.sale) / 100);
       return item;
     });
     let modalNumber = "modal" + nr;
@@ -37,7 +38,13 @@ class Cart extends React.Component<IProps> {
 
     const cartItemMap = this.state.cartItems.map(item => {
       if (item.itemId == id) {
-        item.quantity = event.target.value;
+        console.log(item.item.product.quantity, "item.item.product.quantity");
+        if (event.target.value <= item.item.product.quantity) {
+          item.quantity = event.target.value;
+        } else {
+          event.target.value = item.item.product.quantity;
+          item.quantity = item.item.product.quantity;
+        }
       }
       return item;
     });
@@ -45,12 +52,15 @@ class Cart extends React.Component<IProps> {
     localStorage.setItem("cartItems", JSON.stringify(cartItemMap));
 
     this.state.cartItems.map(item => {
-      total += Number(item.quantity) * Number(item.item.sellingPrice);
+      total += Number(item.quantity) * (item.item.sellingPrice - (item.item.sellingPrice * item.item.sale) / 100);
       return item;
     });
 
     this.setState({ totalCost: total });
     localStorage.setItem("totalCost", JSON.stringify(total));
+  };
+  goCheckout = () => {
+    this.props.history.push("/checkout");
   };
 
   render() {
@@ -72,7 +82,7 @@ class Cart extends React.Component<IProps> {
           defaultValue={item.quantity}
           onChange={this.handleInputChange(item.itemId)}
         ></input>
-        <span>x {item.item.sellingPrice}</span>
+        <span> x {item.item.sellingPrice - (item.item.sellingPrice * item.item.sale) / 100}</span>
       </MDBModalBody>
     ));
     return (
@@ -89,7 +99,9 @@ class Cart extends React.Component<IProps> {
             <MDBBtn color="secondary" onClick={this.toggle(8)}>
               Đóng
             </MDBBtn>
-            <MDBBtn color="primary">Thanh toán</MDBBtn>
+            <MDBBtn color="primary" onClick={this.goCheckout}>
+              Thanh toán
+            </MDBBtn>
           </MDBModalFooter>
         </MDBModal>
       </MDBContainer>
@@ -97,4 +109,4 @@ class Cart extends React.Component<IProps> {
   }
 }
 
-export default Cart;
+export default withRouter(Cart);

@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { IProps, IState } from "./propState";
 import { getAllOrderAction } from "./redux/actions";
+import { getAccountInfoAction } from "screens/login/redux/actions";
 
 class OrderScreen extends React.Component<IProps> {
   state: IState = {
@@ -13,6 +14,7 @@ class OrderScreen extends React.Component<IProps> {
   };
 
   componentDidMount() {
+    this.props.getAccountInfoAction();
     this.props.getAllOrderAction();
   }
 
@@ -85,11 +87,6 @@ class OrderScreen extends React.Component<IProps> {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn
-            // onClick={this.openModalEdit(row.id, row.name, row.phone, row.age, row.sex, row.username, row.password)}
-            >
-              Edit
-            </MDBBtn>
             <MDBBtn onClick={this.delete(row.id)}>Delete</MDBBtn>
           </div>
         ),
@@ -126,6 +123,7 @@ const mapStateToProps = state => {
     listOrder: state.screen.order
   };
 };
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({ getAllOrderAction }, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators({ getAllOrderAction, getAccountInfoAction }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderScreen);

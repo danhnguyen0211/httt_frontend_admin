@@ -80,14 +80,6 @@ export default class TopNavComponent extends React.Component {
             </MDBCollapse>
           </MDBNavbar>
         </Router>
-        <div className="width-100 justify-content-center">
-          <div className="width-80 justify-content-center">
-            <img
-              className="width-100"
-              src="https://tadc.vn/tadc/uploads/2019/01/Thi%E1%BA%BFt-k%E1%BA%BF-Banner-Website-ch%E1%BA%A1y-qu%E1%BA%A3ng-c%C3%A1o-chu%E1%BA%A9n-size-nh%E1%BA%A5t-2019-1.jpg"
-            />
-          </div>
-        </div>
       </MDBContainer>
     );
   }

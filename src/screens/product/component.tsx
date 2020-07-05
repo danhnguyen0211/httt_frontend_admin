@@ -11,7 +11,7 @@ import { getItemByIdAction } from "./redux/actions";
 
 class ProductComponent extends React.Component<IProps> {
   state: IState = {
-    quantity: 0
+    quantity: 1
   };
   componentDidMount() {
     this.props.getItemByIdAction(this.props.match.params.id);
@@ -23,21 +23,14 @@ class ProductComponent extends React.Component<IProps> {
   };
 
   setOrderCode = () => {
-    let orderCode = localStorage.getItem("orderCode");
-    console.log("order", orderCode);
-    const date = new Date();
     let cartItems = JSON.parse(localStorage.getItem("cartItems"));
-    if (!orderCode) {
-      localStorage.setItem("orderCode", date.toString());
-      orderCode = localStorage.getItem("orderCode");
-    }
     const obj = {
-      orderCode,
+      orderId: null,
       itemId: this.props.item.data.id,
       quantity: this.state.quantity,
-      // cost:
-      //   this.state.quantity *
-      //   (this.props.item.data.sellingPrice - (this.props.item.data.sellingPrice * this.props.item.data.sale) / 100),
+      cost:
+        this.state.quantity *
+        (this.props.item.sellingPrice - (this.props.item.sellingPrice * this.props.item.sale) / 100),
       item: this.props.item.data
     };
     if (Number(obj.quantity) > 0) {
@@ -45,8 +38,12 @@ class ProductComponent extends React.Component<IProps> {
         var isExisting = false;
         const cartItemsMap = cartItems.map(cart => {
           if (cart.itemId == obj.itemId) {
-            cart.quantity = Number(cart.quantity) + Number(obj.quantity);
-            isExisting = true;
+            if (cart.quantity + obj.quantity < cart.item.quantity) {
+              cart.quantity = Number(cart.quantity) + Number(obj.quantity);
+              isExisting = true;
+            } else {
+              isExisting = true;
+            }
           }
           return cart;
         });
@@ -128,7 +125,7 @@ class ProductComponent extends React.Component<IProps> {
                 <div>
                   <input
                     type="number"
-                    defaultValue={0}
+                    defaultValue={1}
                     min={1}
                     max={item.product ? item.product.quantity : 1}
                     onChange={this.handleChange("quantity")}

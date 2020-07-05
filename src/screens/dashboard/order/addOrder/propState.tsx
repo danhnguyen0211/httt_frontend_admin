@@ -41,6 +41,16 @@ interface IState {
   paymentStatus: boolean;
   optionPayments: any;
   optionShippings: any;
+  name: string;
+  phone: string;
+  age: number;
+  sex: string;
+  username: string;
+  password: string;
+  id: number;
+  options: any;
+  address: string;
+  zipCode: string;
 }
 
 export { IProps, IState };

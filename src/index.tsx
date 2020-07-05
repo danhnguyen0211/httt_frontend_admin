@@ -12,6 +12,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import CartComponent from "screens/cart";
 import CategoryComponent from "screens/category";
 import CheckoutComponent from "screens/checkout";
+import CustomerSignupComponent from "screens/customer-signup";
 import CategoryScreenComponent from "screens/dashboard/category/component";
 import DashBoardComponent from "screens/dashboard/component";
 import AddAddressScreenComponent from "screens/dashboard/customer/addAddress/component";
@@ -23,6 +24,8 @@ import PaymentScreenComponent from "screens/dashboard/payment/component";
 import ProductScreenComponent from "screens/dashboard/product/component";
 import ShippingScreenComponent from "screens/dashboard/shipping/component";
 import StatsAccountComponent from "screens/dashboard/statistics-account/component";
+import StatsCustomerComponent from "screens/dashboard/statistics-customer/component";
+import StatsProductComponent from "screens/dashboard/statistics-product/component";
 import StatisticScreenComponent from "screens/dashboard/statistics/component";
 import UserScreenComponent from "screens/dashboard/user/component";
 import HomeComponent from "screens/home";
@@ -51,6 +54,9 @@ ReactDOM.render(
           </Route>
           <Route path="/product">
             <Route exact path="/product/:id" component={ProductComponent} />
+          </Route>
+          <Route path="/customer/signup">
+            <Route exact path="/customer/signup" component={CustomerSignupComponent} />
           </Route>
           <Route path="/category">
             <Route exact path="/category/:category" component={CategoryComponent} />
@@ -81,6 +87,8 @@ ReactDOM.render(
             <PrivateRoute exact path="/dashboard/payment" component={PaymentScreenComponent} />
             <PrivateRoute exact path="/dashboard/statistic" component={StatisticScreenComponent} />
             <PrivateRoute exact path="/dashboard/statistic-account" component={StatsAccountComponent} />
+            <PrivateRoute exact path="/dashboard/statistic-product" component={StatsProductComponent} />
+            <PrivateRoute exact path="/dashboard/statistic-customer" component={StatsCustomerComponent} />
           </PrivateRoute>
           <Route path="/settings-page"></Route>
           <Route component={Page404Component} />

@@ -12,7 +12,8 @@ import {
   MDBNavbarNav,
   MDBNavbarToggler,
   MDBNavItem,
-  MDBNavLink
+  MDBNavLink,
+  MDBNav
 } from "mdbreact";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -35,6 +36,7 @@ export default class TopNavComponent extends React.Component<IProps> {
     return <MDBIcon icon="cart-plus"></MDBIcon>;
   };
   public render() {
+    const clientToken = localStorage.getItem("clientToken");
     return (
       <MDBContainer className="client-top-nav-container" fluid>
         <MDBNavbar className="client-top-nav" color="stylish-color" dark expand="md">
@@ -60,17 +62,32 @@ export default class TopNavComponent extends React.Component<IProps> {
               <MDBNavItem>
                 <Cart title={this.icon()}></Cart>
               </MDBNavItem>
-              <MDBNavItem>
-                <MDBDropdown>
-                  <MDBDropdownToggle nav caret>
-                    <MDBIcon icon="user" />
-                  </MDBDropdownToggle>
-                  <MDBDropdownMenu className="dropdown-default">
-                    <MDBDropdownItem href="#!">Settings</MDBDropdownItem>
-                    <MDBDropdownItem onClick={this.logout}>Logout</MDBDropdownItem>
-                  </MDBDropdownMenu>
-                </MDBDropdown>
-              </MDBNavItem>
+              {clientToken ? (
+                <MDBNavItem>
+                  <MDBDropdown>
+                    <MDBDropdownToggle nav caret>
+                      <MDBIcon icon="user" />
+                    </MDBDropdownToggle>
+                    <MDBDropdownMenu className="dropdown-default">
+                      <MDBDropdownItem href="#!">Settings</MDBDropdownItem>
+                      <MDBDropdownItem onClick={this.logout}>Logout</MDBDropdownItem>
+                    </MDBDropdownMenu>
+                  </MDBDropdown>
+                </MDBNavItem>
+              ) : (
+                <MDBNav>
+                  <MDBNavItem>
+                    <MDBNavLink to="/customer/login" link>
+                      Login
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink to="/customer/signup" link>
+                      Signup
+                    </MDBNavLink>
+                  </MDBNavItem>
+                </MDBNav>
+              )}
             </MDBNavbarNav>
           </MDBCollapse>
         </MDBNavbar>

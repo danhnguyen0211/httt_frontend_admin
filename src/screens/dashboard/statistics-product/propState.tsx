@@ -2,15 +2,12 @@ interface IProps extends IDispatchToProps, IStateToProps {}
 
 interface IDispatchToProps {
   getAllOrderAction?: () => void;
-  getAccountInfoAction?: () => void;
 }
 
 interface IStateToProps {
   listOrder: any;
 }
 
-interface IState {
-  searchKey: string;
-}
+interface IState {}
 
 export { IProps, IState };

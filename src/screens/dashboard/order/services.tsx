@@ -30,3 +30,13 @@ export const addNewOrder = async (
     throw error;
   }
 };
+
+export const addNewCartItem = async itemCart => {
+  try {
+    console.log(itemCart, "obj");
+    const response = await postService("cartItem/add", { data: itemCart }, false, false);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
