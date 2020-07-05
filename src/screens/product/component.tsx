@@ -8,13 +8,18 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { IProps, IState } from "./propState";
 import { getItemByIdAction } from "./redux/actions";
+import { getAllShippingsAction } from "screens/dashboard/shipping/redux/actions";
+import { getAllPaymentsAction } from "screens/dashboard/payment/redux/actions";
+import { setListItemsCartAction } from "screens/dashboard/order/redux/actions";
 
-class ProductComponent extends React.Component<IProps> {
+class ProductComponent extends React.Component<any> {
   state: IState = {
     quantity: 1
   };
   componentDidMount() {
     this.props.getItemByIdAction(this.props.match.params.id);
+    this.props.getAllPaymentsAction();
+    this.props.getAllShippingsAction();
   }
 
   handleChange = (field: string) => (event: any) => {
@@ -27,9 +32,9 @@ class ProductComponent extends React.Component<IProps> {
     const obj = {
       orderId: null,
       itemId: this.props.item.data.id,
-      quantity: this.state.quantity,
+      quantity: parseInt(this.state.quantity.toString()),
       cost:
-        this.state.quantity *
+        parseInt(this.state.quantity.toString()) *
         (this.props.item.sellingPrice - (this.props.item.sellingPrice * this.props.item.sale) / 100),
       item: this.props.item.data
     };
@@ -38,7 +43,7 @@ class ProductComponent extends React.Component<IProps> {
         var isExisting = false;
         const cartItemsMap = cartItems.map(cart => {
           if (cart.itemId == obj.itemId) {
-            if (cart.quantity + obj.quantity < cart.item.quantity) {
+            if (parseInt(cart.quantity) + parseInt(obj.quantity.toString()) < parseInt(cart.item.quantity)) {
               cart.quantity = Number(cart.quantity) + Number(obj.quantity);
               isExisting = true;
             } else {
@@ -56,6 +61,26 @@ class ProductComponent extends React.Component<IProps> {
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
       }
     }
+  };
+
+  goCheckout = async () => {
+    this.props.history.push("/checkout");
+    const listItems = await localStorage.getItem("cartItems");
+    let list = JSON.parse(listItems);
+    let cartItems = [];
+    list.map(item => {
+      let new_item = {
+        id: item.item.id,
+        product: item.item.product,
+        productId: item.item.productId,
+        sale: item.item.sale,
+        sellingPrice: item.item.sellingPrice,
+        status: "ACTIVE",
+        quantity: item.quantity
+      };
+      cartItems.push(new_item);
+    });
+    this.props.setListItemsCartAction(cartItems);
   };
 
   render() {
@@ -130,7 +155,7 @@ class ProductComponent extends React.Component<IProps> {
                     max={item.product ? item.product.quantity : 1}
                     onChange={this.handleChange("quantity")}
                   ></input>
-                  <Cart handleClick={this.setOrderCode} title={title()}></Cart>
+                  <Cart goCheckout={this.goCheckout} handleClick={this.setOrderCode} title={title()}></Cart>
                 </div>
               </MDBCol>
             </MDBRow>
@@ -151,6 +176,10 @@ const mapStateToProps = state => ({
   item: state.screen.productPage
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getItemByIdAction }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    { getItemByIdAction, getAllShippingsAction, getAllPaymentsAction, setListItemsCartAction },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductComponent);

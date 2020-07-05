@@ -39,8 +39,8 @@ class AddOrderScreen extends React.Component<any> {
     currentAddress: null,
     code: moment(new Date()).format("hhmmssDDMMYYYY"),
     paymentStatus: null,
-    optionPayments: [],
-    optionShippings: [],
+    listPayment: [],
+    listShipping: [],
     name: null,
     phone: null,
     age: null,
@@ -76,11 +76,20 @@ class AddOrderScreen extends React.Component<any> {
     return null;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getAllItemsAction();
     this.props.getAllAddressesAction();
     this.props.getAllPaymentsAction();
     this.props.getAllShippingsAction();
+    const listPayments = await localStorage.getItem("listPayment");
+    const listPayment = JSON.parse(listPayments);
+    const listShippings = await localStorage.getItem("listShipping");
+    const listShipping = JSON.parse(listShippings);
+
+    this.setState({
+      listPayment,
+      listShipping
+    });
   }
 
   delete = item => () => {
@@ -418,22 +427,6 @@ class AddOrderScreen extends React.Component<any> {
       </MDBModal>
     ) : null;
 
-    this.props.listPayment.data.map(x => {
-      let listPayment = {
-        text: x.method,
-        value: x.id
-      };
-      this.state.optionPayments.push(listPayment);
-    });
-
-    this.props.listShipping.data.map(x => {
-      let listShipping = {
-        text: x.type,
-        value: x.id
-      };
-      this.state.optionShippings.push(listShipping);
-    });
-
     return (
       <ContainerComponent>
         {modalAddUser}
@@ -478,7 +471,7 @@ class AddOrderScreen extends React.Component<any> {
                 </MDBRow>
                 <MDBRow>
                   <MDBSelect
-                    options={this.state.optionPayments}
+                    options={this.state.listPayment}
                     selected="Choose payment method"
                     label="Payment Method"
                     getValue={this.handleSelectPaymentChange}
@@ -486,7 +479,7 @@ class AddOrderScreen extends React.Component<any> {
                 </MDBRow>
                 <MDBRow>
                   <MDBSelect
-                    options={this.state.optionShippings}
+                    options={this.state.listShipping}
                     selected="Choose shipping info"
                     label="Shipping Info"
                     getValue={this.handleSelectShippingChange}

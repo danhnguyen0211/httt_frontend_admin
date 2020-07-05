@@ -8,10 +8,14 @@ import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { IProps } from "./propState";
 import { getAllCategoriesAction, getAllItemsAction } from "./redux/actions";
-class HomeComponent extends React.Component<IProps> {
+import { getAllShippingsAction } from "screens/dashboard/shipping/redux/actions";
+import { getAllPaymentsAction } from "screens/dashboard/payment/redux/actions";
+class HomeComponent extends React.Component<any> {
   componentDidMount() {
     this.props.getAllItemsAction();
     this.props.getAllCategoriesAction();
+    this.props.getAllPaymentsAction();
+    this.props.getAllShippingsAction();
   }
 
   render() {
@@ -75,6 +79,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getAllItemsAction, getAllCategoriesAction }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    { getAllItemsAction, getAllCategoriesAction, getAllPaymentsAction, getAllShippingsAction },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent);

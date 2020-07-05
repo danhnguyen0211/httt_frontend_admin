@@ -40,10 +40,10 @@ class Cart extends React.Component<any> {
       if (item.itemId == id) {
         console.log(item.item.product.quantity, "item.item.product.quantity");
         if (event.target.value <= item.item.product.quantity) {
-          item.quantity = event.target.value;
+          item.quantity = parseInt(event.target.value);
         } else {
           event.target.value = item.item.product.quantity;
-          item.quantity = item.item.product.quantity;
+          item.quantity = parseInt(item.item.product.quantity);
         }
       }
       return item;
@@ -58,9 +58,6 @@ class Cart extends React.Component<any> {
 
     this.setState({ totalCost: total });
     localStorage.setItem("totalCost", JSON.stringify(total));
-  };
-  goCheckout = () => {
-    this.props.history.push("/checkout");
   };
 
   render() {
@@ -99,7 +96,7 @@ class Cart extends React.Component<any> {
             <MDBBtn color="secondary" onClick={this.toggle(8)}>
               Đóng
             </MDBBtn>
-            <MDBBtn color="primary" onClick={this.goCheckout}>
+            <MDBBtn color="primary" onClick={this.props.goCheckout}>
               Thanh toán
             </MDBBtn>
           </MDBModalFooter>

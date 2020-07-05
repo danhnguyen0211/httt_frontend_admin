@@ -9,6 +9,7 @@ import {
   getAllShippingsAction,
   setListShippingsAction
 } from "./actions";
+import _ from "lodash";
 
 function* getAllShippingsActionWatcher() {
   yield takeLatest(getAllShippingsAction, function*() {
@@ -17,6 +18,19 @@ function* getAllShippingsActionWatcher() {
       const result = yield call(getAllShippings);
       if (result.success === true) {
         yield put(setListShippingsAction(result.data));
+        let listShippings = [];
+
+        result.data.map(x => {
+          let listShipping = {
+            text: x.type,
+            value: x.id
+          };
+          listShippings.push(listShipping);
+        });
+
+        listShippings = _.uniqBy(listShippings, "value");
+        console.log(listShippings, "listPayment");
+        localStorage.setItem("listShipping", JSON.stringify(listShippings));
       } else {
         logError(result.message);
       }

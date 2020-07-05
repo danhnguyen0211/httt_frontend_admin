@@ -10,6 +10,7 @@ import homeSaga from "./home/redux/opetarions";
 import loginSaga from "./login/redux/opetarions";
 import productPageSaga from "./product/redux/opetarions";
 import signupSaga from "./signup/redux/opetarions";
+import checkoutSaga from "./checkout/redux/opetarions";
 export default {
   ...loginSaga,
   ...userSaga,
@@ -22,5 +23,6 @@ export default {
   ...shippingSaga,
   ...paymentSaga,
   ...homeSaga,
-  ...productPageSaga
+  ...productPageSaga,
+  ...checkoutSaga
 };

@@ -7,8 +7,10 @@ import { bindActionCreators, Dispatch } from "redux";
 import { IProps, IState } from "./propState";
 import { getAllOrderAction } from "./redux/actions";
 import { getAccountInfoAction } from "screens/login/redux/actions";
+import { getAllPaymentsAction } from "screens/dashboard/payment/redux/actions";
+import { getAllShippingsAction } from "screens/dashboard/shipping/redux/actions";
 
-class OrderScreen extends React.Component<IProps> {
+class OrderScreen extends React.Component<any> {
   state: IState = {
     searchKey: ""
   };
@@ -16,6 +18,8 @@ class OrderScreen extends React.Component<IProps> {
   componentDidMount() {
     this.props.getAccountInfoAction();
     this.props.getAllOrderAction();
+    this.props.getAllPaymentsAction();
+    this.props.getAllShippingsAction();
   }
 
   handleChange = (field: string) => (event: any) => {
@@ -124,6 +128,9 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators({ getAllOrderAction, getAccountInfoAction }, dispatch);
+  bindActionCreators(
+    { getAllOrderAction, getAccountInfoAction, getAllPaymentsAction, getAllShippingsAction },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderScreen);

@@ -39,8 +39,8 @@ interface IState {
   currentAddress: any;
   code: string;
   paymentStatus: boolean;
-  optionPayments: any;
-  optionShippings: any;
+  listPayment: any;
+  listShipping: any;
   name: string;
   phone: string;
   age: number;

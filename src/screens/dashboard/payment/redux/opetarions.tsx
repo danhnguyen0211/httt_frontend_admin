@@ -9,6 +9,7 @@ import {
   getAllPaymentsAction,
   setListPaymentsAction
 } from "./actions";
+import _ from "lodash";
 
 function* getAllPaymentsActionWatcher() {
   yield takeLatest(getAllPaymentsAction, function*() {
@@ -17,6 +18,20 @@ function* getAllPaymentsActionWatcher() {
       const result = yield call(getAllPayments);
       if (result.success === true) {
         yield put(setListPaymentsAction(result.data));
+        console.log(result.data, "11");
+        let listPayments = [];
+
+        result.data.map(x => {
+          let listPayment = {
+            text: x.method,
+            value: x.id
+          };
+          listPayments.push(listPayment);
+        });
+
+        listPayments = _.uniqBy(listPayments, "value");
+        console.log(listPayments, "listPayment");
+        localStorage.setItem("listPayment", JSON.stringify(listPayments));
       } else {
         logError(result.message);
       }
