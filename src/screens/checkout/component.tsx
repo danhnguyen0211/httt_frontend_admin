@@ -167,15 +167,6 @@ class CheckoutComponent extends React.Component<any, any> {
                     <Link to="/home">Shopping now!</Link>
                   </div>
                 )}
-                {this.state.listItem.length > 0 ? (
-                  <DataTable
-                    title="Items in cart"
-                    columns={columnItem}
-                    theme="solarized"
-                    data={this.state.listItem ? this.state.listItem : null}
-                    pagination={true}
-                  />
-                ) : null}
               </MDBRow>
               {this.state.listItem.length > 0 ? (
                 <MDBRow>
