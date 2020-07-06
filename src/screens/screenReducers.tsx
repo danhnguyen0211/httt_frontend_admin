@@ -9,6 +9,7 @@ import shippingReducer from "screens/dashboard/shipping/redux/reducers";
 import usersReducer from "screens/dashboard/user/redux/reducers";
 import accountInfoReducer from "screens/login/redux/reducers";
 import productPageReducer from "./product/redux/reducers";
+import customerReducer from "./customer-login/redux/reducers";
 export default combineReducers({
   user: usersReducer,
   product: productReducer,
@@ -19,5 +20,6 @@ export default combineReducers({
   accountInfo: accountInfoReducer,
   shipping: shippingReducer,
   payment: paymentReducer,
-  productPage: productPageReducer
+  productPage: productPageReducer,
+  customerReducer: customerReducer
 });

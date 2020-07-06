@@ -151,6 +151,7 @@ class ProductScreen extends React.Component<IProps> {
       this.state.categoryId
     );
     this.toggleModalAdd();
+    this.clear();
   };
 
   saveEdit = () => {};

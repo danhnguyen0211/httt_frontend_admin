@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { validateLogin } from "../../services/user/validateLogin";
 import { IProps, IState } from "./propState";
-import { logInAction } from "./redux/actions";
+import { logInCustomerAction } from "./redux/actions";
 
 class LoginComponent extends React.Component<IProps> {
   state: IState = {
@@ -34,7 +34,7 @@ class LoginComponent extends React.Component<IProps> {
     event.preventDefault();
     event.target.className += " was-validated";
     if (validateLogin(this.state.username, this.state.password)) {
-      this.props.logInAction(this.state.username, this.state.password);
+      this.props.logInCustomerAction(this.state.username, this.state.password);
     } else {
       event.preventDefault();
     }
@@ -89,7 +89,7 @@ class LoginComponent extends React.Component<IProps> {
                       <Link className="grey-text" to="/f">
                         Forgot password?
                       </Link>
-                      <Link className="grey-text" to="/signup">
+                      <Link className="grey-text" to="/customer/signup">
                         You don't have an account? Sign up now!
                       </Link>
                     </div>
@@ -111,6 +111,6 @@ class LoginComponent extends React.Component<IProps> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ logInAction }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ logInCustomerAction }, dispatch);
 
 export default connect(null, mapDispatchToProps)(LoginComponent);

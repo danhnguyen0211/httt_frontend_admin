@@ -4,21 +4,21 @@ import { logError } from "containers/utils";
 import { push } from "react-router-redux";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { checkLogin, getAccountInfo } from "../services";
-import { getAccountInfoAction, logInAction, setAccountInfoAction } from "./actions";
+import { logInCustomerAction, setAccountInfoCustomerAction, getAccountInfoCustomerAction } from "./actions";
 
-function* logInWatcher() {
-  yield takeLatest(logInAction, function*({ payload }: any) {
+function* logInCustomerWatcher() {
+  yield takeLatest(logInCustomerAction, function*({ payload }: any) {
     const { username, password } = payload;
     try {
       yield put(onLoadingAction());
       const result = yield call(checkLogin, username, password);
-      console.log(result, "1");
       if (result.success) {
-        yield localStorage.setItem(SYSTEM.TOKEN, result.access_token);
+        yield localStorage.setItem("clientToken", result.access_token);
         const userInfo = yield call(getAccountInfo, result.access_token);
         console.log(userInfo, "user");
-        yield put(setAccountInfoAction(userInfo.user));
-        yield put(push("/dashboard"));
+        yield put(setAccountInfoCustomerAction(userInfo.user));
+        yield localStorage.setItem("router", userInfo.user.id);
+        yield put(push("/customer/address"));
       } else {
         logError(result.message);
       }
@@ -30,14 +30,14 @@ function* logInWatcher() {
   });
 }
 
-function* getAccountInfoWatcher() {
-  yield takeLatest(getAccountInfoAction, function*() {
+function* getAccountInfoCustomerWatcher() {
+  yield takeLatest(getAccountInfoCustomerAction, function*() {
     try {
       yield put(onLoadingAction());
       const token = yield localStorage.getItem(SYSTEM.TOKEN);
       const userInfo = yield call(getAccountInfo, token);
-      console.log(userInfo, "user");
-      yield put(setAccountInfoAction(userInfo.user));
+      console.log(userInfo, "userInfo");
+      yield put(setAccountInfoCustomerAction(userInfo.user));
     } catch (error) {
       logError(error);
     } finally {
@@ -46,4 +46,4 @@ function* getAccountInfoWatcher() {
   });
 }
 
-export default { logInWatcher, getAccountInfoWatcher };
+export default { logInCustomerWatcher, getAccountInfoCustomerWatcher };

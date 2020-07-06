@@ -1,5 +1,5 @@
 import TopNavComponent from "containers/components/layout/top-nav";
-import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBSelect, MDBNavLink } from "mdbreact";
+import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBSelect, MDBNavLink, MDBIcon } from "mdbreact";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import moment from "moment";
 import { addOrderClientAction } from "./redux/actions";
 import { Link } from "react-router-dom";
+import { getAddressesByIdAction } from "screens/dashboard/customer/redux/actions";
 
 class CheckoutComponent extends React.Component<any, any> {
   state: any = {
@@ -23,7 +24,8 @@ class CheckoutComponent extends React.Component<any, any> {
     code: moment(new Date()).format("hhmmssDDMMYYYY"),
     listItem: [],
     listPayment: [],
-    listShipping: []
+    listShipping: [],
+    currentAddress: null
   };
 
   async componentDidMount() {
@@ -34,6 +36,9 @@ class CheckoutComponent extends React.Component<any, any> {
     const listPayment = JSON.parse(listPayments);
     const listShippings = await localStorage.getItem("listShipping");
     const listShipping = JSON.parse(listShippings);
+    let id = await localStorage.getItem("router");
+    console.log(id, "id");
+    this.props.getAddressesByIdAction(id);
 
     this.setState({
       listItem,
@@ -49,6 +54,11 @@ class CheckoutComponent extends React.Component<any, any> {
   handleSelectPaymentChange = event => {
     this.setState({ ...this.state, currentPayment: event[0] });
   };
+  chooseCustomer = address => () => {
+    this.setState({
+      currentAddress: address
+    });
+  };
 
   confirmOrder = async () => {
     const totalCost = await localStorage.getItem("totalCost");
@@ -59,7 +69,7 @@ class CheckoutComponent extends React.Component<any, any> {
       this.state.currentPayment,
       this.state.currentShipping,
       2,
-      5
+      this.state.currentAddress.id
     );
 
     localStorage.removeItem("cartItems");
@@ -98,6 +108,29 @@ class CheckoutComponent extends React.Component<any, any> {
         name: "Quantity",
         selector: "quantity",
         sortable: true,
+        width: "70px"
+      }
+    ];
+    const columnCustomer = [
+      {
+        name: "Address",
+        selector: "address",
+        sortable: true,
+        width: "170px"
+      },
+      {
+        name: "Options",
+        cell: row => (
+          <div>
+            <MDBBtn floating size="sm" gradient="blue" onClick={this.chooseCustomer(row)}>
+              <MDBIcon icon="plus" />
+            </MDBBtn>
+          </div>
+        ),
+        right: true,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
         width: "70px"
       }
     ];
@@ -183,6 +216,11 @@ class CheckoutComponent extends React.Component<any, any> {
                   <MDBInput label="Address" disabled />
                 </MDBCol>
               </MDBRow>
+              {this.state.currentAddress ? (
+                <p>Selected Address: {this.state.currentAddress ? this.state.currentAddress.address : null}</p>
+              ) : null}
+
+              <DataTable columns={columnCustomer} theme="solarized" data={this.props.listCustomers.dataAddress} />
               <MDBRow>
                 <MDBSelect
                   options={this.state.listPayment}
@@ -211,10 +249,14 @@ const mapStateToProps = state => {
   return {
     listShipping: state.screen.shipping,
     listPayment: state.screen.payment,
-    account: state.screen.accountInfo.accountInfo
+    customer: state.screen.customerReducer.customerInfo,
+    listCustomers: state.screen.customer
   };
 };
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getAllShippingsAction, getAllPaymentsAction, addOrderClientAction }, dispatch);
+  bindActionCreators(
+    { getAllShippingsAction, getAllPaymentsAction, addOrderClientAction, getAddressesByIdAction },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckoutComponent);

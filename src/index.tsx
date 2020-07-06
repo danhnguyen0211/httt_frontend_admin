@@ -13,6 +13,8 @@ import CartComponent from "screens/cart";
 import CategoryComponent from "screens/category";
 import CheckoutComponent from "screens/checkout";
 import CustomerSignupComponent from "screens/customer-signup";
+import CustomerLoginComponent from "screens/customer-login";
+import CustomerAddressComponent from "screens/customer-address";
 import CategoryScreenComponent from "screens/dashboard/category/component";
 import DashBoardComponent from "screens/dashboard/component";
 import AddAddressScreenComponent from "screens/dashboard/customer/addAddress/component";
@@ -57,6 +59,12 @@ ReactDOM.render(
           </Route>
           <Route path="/customer/signup">
             <Route exact path="/customer/signup" component={CustomerSignupComponent} />
+          </Route>
+          <Route path="/customer/login">
+            <Route exact path="/customer/login" component={CustomerLoginComponent} />
+          </Route>
+          <Route path="/customer/address">
+            <Route exact path="/customer/address" component={CustomerAddressComponent} />
           </Route>
           <Route path="/category">
             <Route exact path="/category/:category" component={CategoryComponent} />

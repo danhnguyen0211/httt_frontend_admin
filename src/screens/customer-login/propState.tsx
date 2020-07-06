@@ -1,7 +1,7 @@
 interface IProps extends IDispatchToProps, IStateToProps {}
 
 interface IDispatchToProps {
-  logInAction?: (username: string, password: string) => void;
+  logInCustomerAction?: (username: string, password: string) => void;
 }
 
 interface IStateToProps {}

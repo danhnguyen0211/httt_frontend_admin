@@ -1,15 +1,15 @@
 import { handleActions } from "redux-actions";
-import { setAccountInfoAction } from "./actions";
+import { setAccountInfoCustomerAction } from "./actions";
 import IActionState from "./state";
 
 export default handleActions<IActionState, any>(
   {
-    [setAccountInfoAction.toString()]: (state, action) => ({
+    [setAccountInfoCustomerAction.toString()]: (state, action) => ({
       ...state,
-      accountInfo: action.payload.data
+      customerInfo: action.payload.data
     })
   },
   {
-    accountInfo: null
+    customerInfo: null
   }
 );

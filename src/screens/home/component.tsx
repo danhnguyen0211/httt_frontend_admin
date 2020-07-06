@@ -10,12 +10,16 @@ import { IProps } from "./propState";
 import { getAllCategoriesAction, getAllItemsAction } from "./redux/actions";
 import { getAllShippingsAction } from "screens/dashboard/shipping/redux/actions";
 import { getAllPaymentsAction } from "screens/dashboard/payment/redux/actions";
+import { getAddressesByIdAction } from "screens/dashboard/customer/redux/actions";
 class HomeComponent extends React.Component<any> {
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getAllItemsAction();
     this.props.getAllCategoriesAction();
     this.props.getAllPaymentsAction();
     this.props.getAllShippingsAction();
+    let id = await localStorage.getItem("router");
+    console.log(id, "id");
+    this.props.getAddressesByIdAction(id);
   }
 
   render() {
@@ -81,7 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { getAllItemsAction, getAllCategoriesAction, getAllPaymentsAction, getAllShippingsAction },
+    { getAllItemsAction, getAllCategoriesAction, getAllPaymentsAction, getAllShippingsAction, getAddressesByIdAction },
     dispatch
   );
 

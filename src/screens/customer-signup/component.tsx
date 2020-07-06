@@ -171,17 +171,17 @@ class CustomerSignupComponent extends React.Component<IProps> {
                     <MDBSelect
                       options={this.state.option}
                       selected="Choose Sex"
-                      label="Role"
+                      label="Sex"
                       getValue={this.handleSelectChange}
                     />
                   </div>
                   <div className="d-flex justify-content-between">
-                    <Link className="grey-text" to="/login">
+                    <Link className="grey-text" to="/customer/login">
                       Back to login
                     </Link>
                   </div>
                   <div className="text-center mt-4">
-                    <MDBBtn color="primary" className="btn-lg" type="submit">
+                    <MDBBtn color="primary" className="btn-lg" type="submit" onClick={this.signup}>
                       <MDBIcon icon="user-edit" className="mr-1" /> Signup
                     </MDBBtn>
                   </div>
