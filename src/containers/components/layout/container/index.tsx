@@ -44,7 +44,6 @@ export default function ContainerComponent(props: IProps) {
           <SideNavComponent />
         </MDBCol>
         <MDBCol sm="9" md="9" lg="9" xl="9">
-          <TopNavComponent />
           <MDBContainer>{props.children}</MDBContainer>
           {/* <FooterComponent /> */}
         </MDBCol>

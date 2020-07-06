@@ -16,7 +16,7 @@ class OrderScreen extends React.Component<any> {
   };
 
   componentDidMount() {
-    this.props.getAccountInfoAction();
+    // this.props.getAccountInfoAction();
     this.props.getAllOrderAction();
     this.props.getAllPaymentsAction();
     this.props.getAllShippingsAction();

@@ -38,6 +38,7 @@ function* getAccountInfoCustomerWatcher() {
       const userInfo = yield call(getAccountInfo, token);
       console.log(userInfo, "userInfo");
       yield put(setAccountInfoCustomerAction(userInfo.user));
+      yield localStorage.getItem("userInfo");
     } catch (error) {
       logError(error);
     } finally {

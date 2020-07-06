@@ -78,6 +78,7 @@ class CheckoutComponent extends React.Component<any, any> {
   render() {
     console.log(this.state.listItem, "lis");
     const totalCost = localStorage.getItem("totalCost");
+    const clientToken = localStorage.getItem("clientToken");
 
     const columnItem = [
       {
@@ -192,26 +193,40 @@ class CheckoutComponent extends React.Component<any, any> {
                 marginLeft: 20
               }}
             >
-              <MDBRow>
-                <MDBCol sm="10" md="3" lg="3" xl="3">
-                  <MDBInput label="Fullname" disabled />
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol sm="10" md="3" lg="3" xl="3">
-                  <MDBInput label="Username" disabled />
-                </MDBCol>
-              </MDBRow>
-              <MDBRow>
-                <MDBCol sm="10" md="5" lg="5" xl="5">
-                  <MDBInput label="Address" disabled />
-                </MDBCol>
-              </MDBRow>
+              {/* {clientToken ? (
+                <div>
+                  <MDBRow>
+                    <MDBCol sm="10" md="3" lg="3" xl="3">
+                      <MDBInput label="Fullname" disabled />
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol sm="10" md="3" lg="3" xl="3">
+                      <MDBInput label="Username" disabled />
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol sm="10" md="5" lg="5" xl="5">
+                      <MDBInput label="Address" disabled />
+                    </MDBCol>
+                  </MDBRow>
+                </div>
+              ) : (
+                
+              )} */}
               {this.state.currentAddress ? (
                 <p>Selected Address: {this.state.currentAddress ? this.state.currentAddress.address : null}</p>
               ) : null}
-
-              <DataTable columns={columnCustomer} theme="solarized" data={this.props.listCustomers.dataAddress} />
+              {clientToken ? (
+                <DataTable columns={columnCustomer} theme="solarized" data={this.props.listCustomers.dataAddress} />
+              ) : (
+                <MDBNavLink to="/customer/login">Login to checkout</MDBNavLink>
+              )}
+              {this.props.listCustomers.dataAddress.length === 0 ? (
+                <MDBBtn>
+                  <MDBNavLink to="/customer/address">Add address</MDBNavLink>
+                </MDBBtn>
+              ) : null}
               <MDBRow>
                 <MDBSelect
                   options={this.state.listPayment}

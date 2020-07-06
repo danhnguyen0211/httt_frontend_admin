@@ -8,7 +8,8 @@ import {
   MDBModalBody,
   MDBModalFooter,
   MDBModalHeader,
-  MDBRow
+  MDBRow,
+  MDBNavLink
 } from "mdbreact";
 import React from "react";
 import DataTable from "react-data-table-component";
@@ -219,7 +220,7 @@ class CustomerAddressScreen extends React.Component<any> {
     });
 
     return (
-      <ContainerComponent>
+      <div>
         {modalAddUser}
         {modalEditUser}
         <MDBContainer>
@@ -229,11 +230,14 @@ class CustomerAddressScreen extends React.Component<any> {
               <MDBCol md="12">
                 <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
                 <DataTable title="Address" columns={columns} theme="solarized" data={data} pagination={true} />
+                <MDBNavLink to="/checkout" link>
+                  Go to checkout
+                </MDBNavLink>
               </MDBCol>
             </MDBRow>
           </MDBRow>
         </MDBContainer>
-      </ContainerComponent>
+      </div>
     );
   }
 }

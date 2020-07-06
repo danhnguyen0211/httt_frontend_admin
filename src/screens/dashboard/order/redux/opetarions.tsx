@@ -2,7 +2,7 @@ import { offLoadingAction, onLoadingAction } from "containers/redux/actions";
 import { logError } from "containers/utils";
 import { push } from "react-router-redux";
 import { call, put, takeLatest, select } from "redux-saga/effects";
-import { addNewOrder, getAllOrder, addNewCartItem } from "../services";
+import { addNewOrder, getAllOrder, addNewCartItem, getOrderByAccountId } from "../services";
 import {
   addOrderAction,
   getAllOrderAction,
@@ -17,11 +17,21 @@ function* getAllOrderActionWatcher() {
   yield takeLatest(getAllOrderAction, function*() {
     try {
       yield put(onLoadingAction());
-      const result = yield call(getAllOrder);
-      if (result.success === true) {
-        yield put(setListOrderAction(result.data));
-      } else {
-        logError(result.message);
+      let accountInfo = yield localStorage.getItem("accountInfo");
+      accountInfo = JSON.parse(accountInfo);
+      if (accountInfo) {
+        console.log(accountInfo, "acc");
+        let result = null;
+        if (accountInfo.role === "ADMIN") {
+          result = yield call(getAllOrder);
+        } else {
+          result = yield call(getOrderByAccountId, accountInfo.id);
+        }
+        if (result.success === true) {
+          yield put(setListOrderAction(result.data));
+        } else {
+          logError(result.message);
+        }
       }
     } catch (error) {
       logError(error);

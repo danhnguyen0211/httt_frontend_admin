@@ -15,7 +15,7 @@ class CustomerSignupComponent extends React.Component<IProps> {
     name: "",
     phone: "",
     age: null,
-    sex: "SELLER",
+    sex: "MALE",
     option: [
       {
         checked: true,

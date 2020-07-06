@@ -38,6 +38,7 @@ function* getAccountInfoWatcher() {
       const userInfo = yield call(getAccountInfo, token);
       console.log(userInfo, "user");
       yield put(setAccountInfoAction(userInfo.user));
+      yield localStorage.setItem("accountInfo", JSON.stringify(userInfo.user));
     } catch (error) {
       logError(error);
     } finally {

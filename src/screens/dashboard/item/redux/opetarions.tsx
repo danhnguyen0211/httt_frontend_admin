@@ -50,7 +50,7 @@ function* editItemActionWatcher() {
       const { id, sale, sellingPrice, productId } = payload;
       const result = yield call(editItem, id, sale, sellingPrice, productId);
       if (result && result.success === true) {
-        const data = yield select(state => state.screen.product);
+        const data = yield select(state => state.screen.item);
         data.data.map(x => {
           if (x.id === id) {
             x.name = name;

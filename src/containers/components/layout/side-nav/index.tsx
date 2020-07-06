@@ -1,5 +1,16 @@
-import { MDBIcon, MDBSideNav, MDBSideNavCat, MDBSideNavLink, MDBSideNavNav } from "mdbreact";
+import {
+  MDBIcon,
+  MDBSideNav,
+  MDBSideNavCat,
+  MDBSideNavLink,
+  MDBSideNavNav,
+  MDBBadge,
+  MDBBtn,
+  MDBNavItem,
+  MDBNavLink
+} from "mdbreact";
 import React from "react";
+import { SYSTEM } from "containers/contants";
 
 export default class SideNavComponent extends React.Component {
   state = {
@@ -12,7 +23,18 @@ export default class SideNavComponent extends React.Component {
     });
   };
 
+  logout = () => {
+    localStorage.clear();
+    location.reload();
+  };
+
+  login = () => {
+    localStorage.clear();
+    location.reload();
+  };
+
   public render() {
+    const token = localStorage.getItem(SYSTEM.TOKEN);
     return (
       <MDBSideNav
         logo="https://mdbootstrap.com/img/logo/mdb-transparent.png"
@@ -82,6 +104,17 @@ export default class SideNavComponent extends React.Component {
             <MDBSideNavLink>FAQ</MDBSideNavLink>
             <MDBSideNavLink>Write a message</MDBSideNavLink>
           </MDBSideNavCat>
+          {token ? (
+            <MDBBtn style={{ marginLeft: 30 }} floating size="sm" gradient="blue" onClick={this.logout}>
+              <MDBIcon icon="sign-out-alt" />
+            </MDBBtn>
+          ) : (
+            <MDBNavItem>
+              <MDBNavLink to="/login" link>
+                Login
+              </MDBNavLink>
+            </MDBNavItem>
+          )}
         </MDBSideNavNav>
       </MDBSideNav>
     );

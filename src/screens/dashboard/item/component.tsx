@@ -38,7 +38,17 @@ class ItemsScreen extends React.Component<IProps> {
     });
   };
 
-  toggleModalEdit = () => {
+  toggleModalEdit = row => () => {
+    this.setState({
+      modalEditStatus: !this.state.modalEditStatus,
+      id: row.id,
+      sale: row.sale,
+      sellingPrice: row.sellingPrice,
+      productId: row.productId
+    });
+  };
+
+  closeEdit = () => {
     this.setState({
       modalEditStatus: !this.state.modalEditStatus
     });
@@ -46,7 +56,10 @@ class ItemsScreen extends React.Component<IProps> {
 
   saveAdd = () => {};
 
-  saveEdit = () => {};
+  saveEdit = () => {
+    this.props.editItemAction(this.state.id, this.state.sale, this.state.sellingPrice, this.state.productId);
+    this.closeEdit();
+  };
 
   delete = (id: number) => () => {
     this.props.deleteItemAction(id);
@@ -85,14 +98,13 @@ class ItemsScreen extends React.Component<IProps> {
     // ) : null;
 
     const modalEditItem = this.state.modalEditStatus ? (
-      <MDBModal isOpen={this.state.modalEditStatus} toggle={this.toggleModalEdit}>
-        <MDBModalHeader toggle={this.toggleModalEdit}>
+      <MDBModal isOpen={this.state.modalEditStatus} toggle={this.closeEdit}>
+        <MDBModalHeader toggle={this.closeEdit}>
           <strong>Edit the item</strong>
         </MDBModalHeader>
         <MDBModalBody>
-          <MDBInput label="Sell Price" />
-          <MDBInput label="Sale" />
-          <MDBInput label="Description" />
+          <MDBInput label="Sell Price" value={this.state.sellingPrice} onChange={this.handleChange("sellingPrice")} />
+          <MDBInput label="Sale" value={this.state.sale} onChange={this.handleChange("sale")} />
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggleModalEdit}>
@@ -152,7 +164,7 @@ class ItemsScreen extends React.Component<IProps> {
         name: "Options",
         cell: row => (
           <div>
-            <MDBBtn onClick={this.toggleModalEdit}>Edit</MDBBtn>
+            <MDBBtn onClick={this.toggleModalEdit(row)}>Edit</MDBBtn>
             <MDBBtn onClick={this.delete(row.id)}>Delete</MDBBtn>
           </div>
         ),

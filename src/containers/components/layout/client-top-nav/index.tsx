@@ -18,7 +18,7 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 import { IProps } from "./propState";
-export default class TopNavComponent extends React.Component<IProps> {
+export default class TopNavComponent extends React.Component<any> {
   state = {
     isOpen: false
   };
@@ -29,7 +29,8 @@ export default class TopNavComponent extends React.Component<IProps> {
 
   logout = () => {
     localStorage.clear();
-    location.reload();
+    // location.reload();
+    this.props.history.push("/customer/login");
   };
 
   icon = () => {
@@ -66,7 +67,9 @@ export default class TopNavComponent extends React.Component<IProps> {
                 <MDBNavItem>
                   <MDBDropdown>
                     <MDBDropdownToggle nav caret>
-                      <MDBIcon icon="user" />
+                      <MDBIcon icon="user">
+                        <MDBNavLink to="/checkout"></MDBNavLink>
+                      </MDBIcon>
                     </MDBDropdownToggle>
                     <MDBDropdownMenu className="dropdown-default">
                       <MDBDropdownItem href="#!">Settings</MDBDropdownItem>

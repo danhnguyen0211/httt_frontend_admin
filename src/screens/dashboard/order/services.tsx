@@ -9,6 +9,16 @@ export const getAllOrder = async () => {
   }
 };
 
+export const getOrderByAccountId = async id => {
+  try {
+    const response = await getService(`order/account/${id}`, null, false, false);
+    console.log(response, "r");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addNewOrder = async (
   code: string,
   paymentStatus: string,

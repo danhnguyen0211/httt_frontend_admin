@@ -5,7 +5,7 @@ import { call, put, takeLatest, select } from "redux-saga/effects";
 import { addNewOrder, getAllOrder, addNewCartItem } from "../services";
 import {
   addOrderClientAction,
-  getAllOrderAction,
+  // getAllOrderAction,
   setListOrderAction,
   addCartItemAction,
   addNewCustomerOrderAction,
@@ -13,23 +13,23 @@ import {
 } from "./actions";
 import { addNewCustomer, addNewAddress } from "screens/dashboard/customer/services";
 
-function* getAllOrderActionWatcher() {
-  yield takeLatest(getAllOrderAction, function*() {
-    try {
-      yield put(onLoadingAction());
-      const result = yield call(getAllOrder);
-      if (result.success === true) {
-        yield put(setListOrderAction(result.data));
-      } else {
-        logError(result.message);
-      }
-    } catch (error) {
-      logError(error);
-    } finally {
-      yield put(offLoadingAction());
-    }
-  });
-}
+// function* getAllOrderActionWatcher() {
+//   yield takeLatest(getAllOrderAction, function*() {
+//     try {
+//       yield put(onLoadingAction());
+//       const result = yield call(getAllOrder);
+//       if (result.success === true) {
+//         yield put(setListOrderAction(result.data));
+//       } else {
+//         logError(result.message);
+//       }
+//     } catch (error) {
+//       logError(error);
+//     } finally {
+//       yield put(offLoadingAction());
+//     }
+//   });
+// }
 
 function* addOrderClientActionWatcher() {
   yield takeLatest(addOrderClientAction, function*({ payload }: any) {
@@ -124,7 +124,7 @@ function* addNewCustomerOrderActionWatcher() {
 }
 
 export default {
-  getAllOrderActionWatcher,
+  // getAllOrderActionWatcher,
   addOrderClientActionWatcher,
   addCartItemActionWatcher,
   addNewCustomerOrderActionWatcher

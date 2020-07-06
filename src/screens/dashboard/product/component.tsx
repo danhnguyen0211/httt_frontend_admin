@@ -288,7 +288,7 @@ class ProductScreen extends React.Component<IProps> {
           <strong>Add a new product</strong>
         </MDBModalHeader>
         <MDBModalBody>
-          <MDBCard testimonial>
+          {/* <MDBCard testimonial>
             <MDBCardBody>
               <MDBFileInput
                 className="upload-logo"
@@ -302,7 +302,7 @@ class ProductScreen extends React.Component<IProps> {
                 </MDBAlert>
               ) : null}
             </MDBCardBody>
-          </MDBCard>
+          </MDBCard> */}
           <MDBInput label="Name" value={this.state.name ? this.state.name : ""} onChange={this.handleChange("name")} />
           <MDBInput label="Code" value={this.state.code ? this.state.code : ""} onChange={this.handleChange("code")} />
           <MDBInput
