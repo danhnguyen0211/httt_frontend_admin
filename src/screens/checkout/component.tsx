@@ -68,7 +68,7 @@ class CheckoutComponent extends React.Component<any, any> {
       totalCost,
       this.state.currentPayment,
       this.state.currentShipping,
-      2,
+      1,
       this.state.currentAddress.id
     );
 

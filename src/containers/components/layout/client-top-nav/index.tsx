@@ -30,7 +30,8 @@ export default class TopNavComponent extends React.Component<any> {
   logout = () => {
     localStorage.clear();
     // location.reload();
-    this.props.history.push("/customer/login");
+    // this.props.history.push("/customer/login");
+    location.reload();
   };
 
   icon = () => {
@@ -52,17 +53,17 @@ export default class TopNavComponent extends React.Component<any> {
               <MDBNavItem>
                 <MDBNavLink to="/home">Giới thiệu</MDBNavLink>
               </MDBNavItem>
-              <MDBNavItem>
+              {/* <MDBNavItem>
                 <MDBNavLink to="/shopping">Lịch sử giao dịch</MDBNavLink>
-              </MDBNavItem>
+              </MDBNavItem> */}
               <MDBNavItem>
-                <MDBNavLink to="/about">Kiểm tra đơn hàng</MDBNavLink>
+                <MDBNavLink to="/customer/order">Kiểm tra đơn hàng</MDBNavLink>
               </MDBNavItem>
             </MDBNavbarNav>
             <MDBNavbarNav right>
-              <MDBNavItem>
+              {/* <MDBNavItem>
                 <Cart title={this.icon()}></Cart>
-              </MDBNavItem>
+              </MDBNavItem> */}
               {clientToken ? (
                 <MDBNavItem>
                   <MDBDropdown>
