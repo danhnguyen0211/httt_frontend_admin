@@ -1,4 +1,4 @@
-import TopNavComponent from "containers/components/layout/top-nav";
+import TopNavComponent from "containers/components/layout/client-top-nav";
 import { MDBBtn, MDBCol, MDBInput, MDBRow, MDBSelect, MDBNavLink, MDBIcon } from "mdbreact";
 import React from "react";
 import { connect } from "react-redux";
@@ -222,10 +222,8 @@ class CheckoutComponent extends React.Component<any, any> {
               ) : (
                 <MDBNavLink to="/customer/login">Login to checkout</MDBNavLink>
               )}
-              {this.props.listCustomers.dataAddress.length === 0 ? (
-                <MDBBtn>
-                  <MDBNavLink to="/customer/address">Add address</MDBNavLink>
-                </MDBBtn>
+              {clientToken && this.props.listCustomers.dataAddress.length === 0 ? (
+                <MDBNavLink to="/customer/address">Add address</MDBNavLink>
               ) : null}
               <MDBRow>
                 <MDBSelect

@@ -12,6 +12,7 @@ import {
   MDBNavLink
 } from "mdbreact";
 import React from "react";
+import TopNavComponent from "containers/components/layout/client-top-nav";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
@@ -225,16 +226,20 @@ class CustomerAddressScreen extends React.Component<any> {
         {modalEditUser}
         <MDBContainer>
           <MDBRow>
-            <MDBRow>
-              <MDBBtn onClick={this.toggleModalAdd}>Add a new address</MDBBtn>
-              <MDBCol md="12">
-                <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
-                <DataTable title="Address" columns={columns} theme="solarized" data={data} pagination={true} />
-                <MDBNavLink to="/checkout" link>
-                  Go to checkout
-                </MDBNavLink>
-              </MDBCol>
-            </MDBRow>
+            <MDBCol sm="12" md="12" lg="12" xl="12" className="mx-auto my-auto">
+              <TopNavComponent />
+
+              <MDBRow>
+                <MDBBtn onClick={this.toggleModalAdd}>Add a new address</MDBBtn>
+                <MDBCol md="12">
+                  <MDBInput hint="Search" type="text" containerClass="mt-0" onChange={this.handleChange("searchKey")} />
+                  <DataTable title="Address" columns={columns} theme="solarized" data={data} pagination={true} />
+                  <MDBNavLink to="/checkout" link>
+                    Go to checkout
+                  </MDBNavLink>
+                </MDBCol>
+              </MDBRow>
+            </MDBCol>
           </MDBRow>
         </MDBContainer>
       </div>
