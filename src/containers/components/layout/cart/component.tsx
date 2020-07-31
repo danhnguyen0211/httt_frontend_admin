@@ -31,7 +31,20 @@ class Cart extends React.Component<any> {
     });
     localStorage.setItem("totalCost", JSON.stringify(total));
   };
-
+  // goCheckout = () => {
+  //   const cartItemMap = this.state.cartItems.map(item => {
+  //     if (item.itemId == id) {
+  //       console.log(item.item.product.quantity, "item.item.product.quantity");
+  //       if (event.target.value <= item.item.product.quantity) {
+  //         item.quantity = parseInt(event.target.value);
+  //       } else {
+  //         // event.target.value = item.item.product.quantity;
+  //         // item.quantity = parseInt(item.item.product.quantity);
+  //       }
+  //     }
+  //     return item;
+  //   });
+  // }
   handleInputChange = (id: Number) => (event: any) => {
     event.persist();
     var total = 0;
@@ -42,6 +55,9 @@ class Cart extends React.Component<any> {
         if (event.target.value <= item.item.product.quantity) {
           item.quantity = parseInt(event.target.value);
         } else {
+          // event.target.value = item.item.product.quantity;
+          // item.quantity = parseInt(item.item.product.quantity);
+          alert("Trong kho khong du san pham");
           event.target.value = item.item.product.quantity;
           item.quantity = parseInt(item.item.product.quantity);
         }

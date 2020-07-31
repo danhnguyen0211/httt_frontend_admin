@@ -38,7 +38,7 @@ function* addNewCustomerActionWatcher() {
         const data = yield select(state => state.screen.customer);
         data.data.unshift(result.data);
         yield put(setListCustomersAction(data.data));
-        yield put(push("/customer/login"));
+        // yield put(push("/customer/login"));
       } else {
         logError(result.message);
       }

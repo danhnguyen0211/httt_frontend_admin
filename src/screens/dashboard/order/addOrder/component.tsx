@@ -190,7 +190,7 @@ class AddOrderScreen extends React.Component<any> {
   };
 
   saveAdd = () => {
-    this.props.addNewCustomerAction(
+    this.props.addNewCustomerOrderAction(
       this.state.name,
       this.state.phone,
       this.state.age,

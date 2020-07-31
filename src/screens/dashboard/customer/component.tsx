@@ -17,8 +17,9 @@ import { bindActionCreators, Dispatch } from "redux";
 import { IProps, IState } from "./propState";
 import { addNewCustomerAction, deleteCustomerAction, editCustomerAction, getAllCustomersAction } from "./redux/actions";
 // import { browserHistory } from 'react-router-dom';
+import { addNewCustomerClientAction } from "screens/customer-signup/redux/actions";
 
-class CustomerScreen extends React.Component<IProps> {
+class CustomerScreen extends React.Component<any> {
   state: IState = {
     modalAddStatus: false,
     modalEditStatus: false,
@@ -103,7 +104,7 @@ class CustomerScreen extends React.Component<IProps> {
   };
 
   saveAdd = () => {
-    this.props.addNewCustomerAction(
+    this.props.addNewCustomerClientAction(
       this.state.name,
       this.state.phone,
       this.state.age,
@@ -284,7 +285,13 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
-    { getAllCustomersAction, addNewCustomerAction, editCustomerAction, deleteCustomerAction },
+    {
+      getAllCustomersAction,
+      addNewCustomerAction,
+      editCustomerAction,
+      deleteCustomerAction,
+      addNewCustomerClientAction
+    },
     dispatch
   );
 
